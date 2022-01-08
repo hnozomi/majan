@@ -1,4 +1,4 @@
-import { FC, FormEvent, useState } from "react";
+import { FC, FormEvent, useState, ChangeEvent, SyntheticEvent } from "react";
 
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -7,9 +7,6 @@ import TextField from "@mui/material/TextField";
 import { Grid, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { ChangeEvent } from "react";
-import { FormEventHandler } from "react";
-import { SyntheticEvent } from "react";
 import { styled } from "@mui/system";
 
 const M_Typography = styled(Typography)({
@@ -28,60 +25,39 @@ export const Setting: FC<Props> = (props) => {
     third: "",
     fourth: "",
   });
-  const [chip, setChip] = useState("チップあり");
-  const [yakitori, setYakitori] = useState("焼き鳥あり");
-  const [tobi, setTobi] = useState("飛び賞あり");
-  const [chipcheck, setChipCheck] = useState(false);
-  const [yakitoricheck, setYakitoriCheck] = useState(false);
-  const [tobicheck, setTobiCheck] = useState(false);
 
   const [rule, setRule] = useState({
-    chip: "チップあり",
-    yakitori: "焼き鳥あり",
-    tobi: "飛び賞あり",
+    chip: true,
+    yakitori: true,
+    tobi: true,
   });
 
-  const onChangeChip = (e: SyntheticEvent<EventTarget>) => {
+  const onSetRules = (e: SyntheticEvent<EventTarget>) => {
     const targetValue = e.target as HTMLInputElement;
-    setChip(targetValue.value);
-    setChipCheck(!chipcheck);
-  };
-  const onChangeYakitori = (e: SyntheticEvent<EventTarget>) => {
-    const targetValue = e.target as HTMLInputElement;
-    setYakitori(targetValue.value);
-    setYakitoriCheck(!yakitoricheck);
-  };
-  const onChangeTobi = (e: SyntheticEvent<EventTarget>) => {
-    const targetValue = e.target as HTMLInputElement;
-    setTobi(targetValue.value);
-    setTobiCheck(!tobicheck);
+    const check = targetValue.value === "true" ? true : false;
+    setRule({ ...rule, [targetValue.name]: check });
   };
 
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    onComplate();
-    localStorage.setItem("Member1", members.first);
-    localStorage.setItem("Member2", members.second);
-    localStorage.setItem("Member3", members.third);
-    localStorage.setItem("Member4", members.fourth);
-    localStorage.setItem("chip", chip);
-    localStorage.setItem("yakitori", yakitori);
-  };
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onSetMembers = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const number = e.target.name;
-    const tempMembers = { ...members, [number]: e.target.value };
+    const tempMembers = { ...members, [number]: e.target.value }; //[]をつけないと新たにnumberというKeyができる
+    console.log(tempMembers);
     setMembers(tempMembers);
   };
 
-  const onLocalStorageClear = () => {
-    localStorage.removeItem("Member1");
-    localStorage.removeItem("Member2");
-    localStorage.removeItem("Member3");
-    localStorage.removeItem("Member4");
-    localStorage.removeItem("yakitori");
-    localStorage.removeItem("chip");
+  const onLocalStorageAdd = (e: FormEvent) => {
+    e.preventDefault();
+    onComplate();
+    localStorage.setItem("Members", JSON.stringify(members)); //JSON.stringifyで文字列に変換することでオブジェクトも保存できる
+    localStorage.setItem("Rules", JSON.stringify(rule));
   };
+
+  const onLocalStorageClear = () => {
+    localStorage.removeItem("Members");
+    localStorage.removeItem("Rules");
+  };
+
   return (
     <Box sx={{ p: 2 }}>
       <Box
@@ -102,7 +78,7 @@ export const Setting: FC<Props> = (props) => {
         </Button>
       </Box>
 
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onLocalStorageAdd}>
         <Typography sx={{ mb: 1 }}>対戦相手</Typography>
         <Grid container columns={2} direction="column">
           <TextField
@@ -111,7 +87,7 @@ export const Setting: FC<Props> = (props) => {
             variant="standard"
             value={members.first}
             name="first"
-            onChange={onChange}
+            onChange={onSetMembers}
             sx={{ mb: 1 }}
           />
           <TextField
@@ -121,7 +97,7 @@ export const Setting: FC<Props> = (props) => {
             variant="standard"
             value={members.second}
             name="second"
-            onChange={onChange}
+            onChange={onSetMembers}
           />
           <TextField
             sx={{ mb: 1 }}
@@ -130,7 +106,7 @@ export const Setting: FC<Props> = (props) => {
             variant="standard"
             value={members.third}
             name="third"
-            onChange={onChange}
+            onChange={onSetMembers}
           />
           <TextField
             sx={{ mb: 1 }}
@@ -139,62 +115,65 @@ export const Setting: FC<Props> = (props) => {
             variant="standard"
             value={members.fourth}
             name="fourth"
-            onChange={onChange}
+            onChange={onSetMembers}
           />
         </Grid>
 
-        {/* <Typography sx={{ mt: 2 }}>チップ</Typography> */}
         <M_Typography>チップ</M_Typography>
         <FormGroup>
           <FormControlLabel
             control={<Checkbox defaultChecked />}
             label="あり"
-            value="チップあり"
-            checked={!chipcheck}
-            onChange={onChangeChip}
+            value={true}
+            checked={rule.chip}
+            onChange={onSetRules}
+            name="chip"
           />
           <FormControlLabel
             control={<Checkbox />}
             label="なし"
-            value="チップなし"
-            checked={chipcheck}
-            onChange={onChangeChip}
+            value={false}
+            checked={!rule.chip}
+            onChange={onSetRules}
+            name="chip"
           />
         </FormGroup>
-        {/* <Typography sx={{ mt: 2 }}>焼き鳥</Typography> */}
         <M_Typography>焼き鳥</M_Typography>
         <FormGroup>
           <FormControlLabel
             control={<Checkbox defaultChecked />}
             label="あり"
-            value="焼き鳥あり"
-            checked={!yakitoricheck}
-            onChange={onChangeYakitori}
+            value={true}
+            checked={rule.yakitori}
+            onChange={onSetRules}
+            name="yakitori"
           />
           <FormControlLabel
             control={<Checkbox />}
             label="なし"
-            value="焼き鳥なし"
-            checked={yakitoricheck}
-            onChange={onChangeYakitori}
+            value={false}
+            checked={!rule.yakitori}
+            onChange={onSetRules}
+            name="yakitori"
           />
         </FormGroup>
         <M_Typography>飛び賞</M_Typography>
-        {/* <Typography sx={{ mt: 2 }}>飛び賞</Typography> */}
         <FormGroup>
           <FormControlLabel
             control={<Checkbox defaultChecked />}
             label="あり"
-            value="飛び賞あり"
-            checked={!tobicheck}
-            onChange={onChangeTobi}
+            value={true}
+            checked={rule.tobi}
+            onChange={onSetRules}
+            name="tobi"
           />
           <FormControlLabel
             control={<Checkbox />}
             label="なし"
-            value="飛び賞なし"
-            checked={tobicheck}
-            onChange={onChangeTobi}
+            value={false}
+            checked={!rule.tobi}
+            onChange={onSetRules}
+            name="tobi"
           />
         </FormGroup>
         <Box sx={{ textAlign: "right" }}>

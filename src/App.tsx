@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { Matrix } from "./components/pages/Matrix";
 import { Setting } from "./components/pages/Setting";
+import { AuthProvider } from "./hooks/useMakeMatrix";
 
 export const App = () => {
   const Complete = localStorage.getItem("Complete");
@@ -9,5 +11,12 @@ export const App = () => {
     localStorage.setItem("Complete", "true");
     setComplete("true");
   };
-  return <Setting onComplate={onComplate} />;
+  // return <Setting onComplate={onComplate} />;
+  return complete ? (
+    <AuthProvider>
+      <Matrix />
+    </AuthProvider>
+  ) : (
+    <Setting onComplate={onComplate} />
+  );
 };
