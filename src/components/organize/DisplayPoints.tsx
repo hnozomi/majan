@@ -1,6 +1,6 @@
 import { Input, InputAdornment } from "@mui/material";
 import { FC, memo, useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../hooks/useMakeMatrix";
+import { PointsContext } from "../../context/MembersPointsContext";
 import { InputBet } from "./InputBet";
 
 type Props = {
@@ -15,22 +15,8 @@ type Member = {
 
 export const DisplayPoints: FC<Props> = (props) => {
   const { params } = props;
-  const { points } = useContext(AuthContext);
+  const { points } = useContext(PointsContext);
 
-  // const [points, setPoints] = useState([
-  //   {
-  //     member1: 100,
-  //     member2: 200,
-  //     member3: 300,
-  //     member4: 400,
-  //   },
-  //   {
-  //     member1: 1000,
-  //     member2: 2000,
-  //     member3: 3000,
-  //     member4: 4000,
-  //   },
-  // ]);
   const [displayArray, setDisplayArray] = useState([]);
   const [loading, setLoading] = useState(true);
 

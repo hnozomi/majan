@@ -1,6 +1,6 @@
 import { Input, InputAdornment } from "@mui/material";
 import { FC, useContext } from "react";
-import { AuthContext } from "../../hooks/useMakeMatrix";
+import { PointsContext } from "../../context/MembersPointsContext";
 
 type Props = {
   fieldName: string;
@@ -8,7 +8,7 @@ type Props = {
 };
 
 export const InputBet: FC<Props> = (props) => {
-  const { updateMatrix } = useContext(AuthContext);
+  const { updateMatrix } = useContext(PointsContext);
   const { fieldName, id } = props;
   return (
     <Input

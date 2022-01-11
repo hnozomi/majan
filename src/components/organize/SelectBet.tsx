@@ -5,19 +5,48 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { FC } from "react";
 
-export const SelectBet: FC = () => {
-  const [bet, setBet] = useState("");
+type Props = {
+  params: any;
+};
+
+type BetType = {
+  id: number;
+};
+
+export const SelectBet: FC<Props> = (props) => {
+  const { id } = props.params;
+  console.log(id);
+  const [bet, setBet] = useState([{}]);
 
   const handleChange = (e: SelectChangeEvent<string>) => {
-    setBet(e.target.value);
+    // console.log(id);
+    // const test = { ...bet[1]: { id: 0, bet: "" }};
+    const temp = { id: id, bet: e.target.value };
+    console.log(temp);
+    console.log([...bet, temp]);
+    setBet([...bet, temp]);
+    // console.log({ ...bet });
+    // const temp1 = { ...bet, [id]: temp };
+    // console.log(temp1);
+    // console.log(test);
+    // console.log(bet);
+
+    // const temp = { ...bet[1], id: id, bet: e.target.value };
+    // console.log(temp);
+    // setBet([...bet, { [id]: temp }]);
+    // setBet([{ ...bet, [id]: temp }]);
   };
+
+  // const test: keyof BetType = id;
+  const test: any = 0;
 
   return (
     <>
+      {console.log(bet)}
       <Select
         variant="standard"
         sx={{ width: "100%" }}
-        value={bet}
+        // value={bet[0]}
         label="Bet"
         onChange={handleChange}
       >

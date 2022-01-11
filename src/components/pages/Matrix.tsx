@@ -1,10 +1,17 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 
+import {
+  Box,
+  FormControl,
+  FormHelperText,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import { Input, InputAdornment } from "@mui/material";
 import { SelectBet } from "../organize/SelectBet";
 import { DisplayPoints } from "../organize/DisplayPoints";
-// import { FormSelect } from "./FormSelect";
-// import { FormInput } from "./FormInput";
+import { PointsContext } from "../../context/MembersPointsContext";
 
 type Member = {
   first: string;
@@ -13,66 +20,21 @@ type Member = {
   fourth: string;
 };
 
-const rows = [{ id: 1 }, { id: 2 }, { id: 3 }];
-// const rows = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+type Rules = {
+  chip: boolean;
+  yakitori: boolean;
+  tobi: boolean;
+};
 
-// カラムではなくてRowsでRenderCellsはできる？
-// const columns = [
-//   { field: "id", headerName: "ID", width: 100 },
-//   // 詳細ボタン
-//   {
-//     field: "editBtn",
-//     headerName: "詳細",
-//     sortable: false,
-//     width: 130,
-//     editable: true,
-//     renderCell: <div>AAA</div>,
-//     // renderCell: (params) => <FormSelect param={params} />,
-//   },
-//   {
-//     field: "member1",
-//     headerName: [member1],
-//     sortable: false,
-//     width: 100,
-//     editable: true,
-//     renderCell: <div>BBB</div>,
-//     // renderCell: (params) => <FormInput rows={rows} />,
-//     // disableClickEventBubbling: true
-//   },
-//   {
-//     field: "member2",
-//     headerName: [member2],
-//     sortable: false,
-//     width: 100,
-//     editable: true,
-//     renderCell: <div>CCC</div>,
-//     // disableClickEventBubbling: true
-//     // renderCell: (params) => <FormInput rows={rows} />
-//   },
-//   {
-//     field: "member3",
-//     headerName: [member3],
-//     sortable: false,
-//     width: 100,
-//     editable: true,
-//     renderCell: <div>DDD</div>,
-//     // disableClickEventBubbling: true
-//     // renderCell: renderRatingEditInputCell,
-//   },
-//   {
-//     field: "member4",
-//     headerName: [member4],
-//     sortable: false,
-//     width: 100,
-//     editable: true,
-//     renderCelss: <div>EEE</div>,
-//   },
-// ];
+const rows = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
 export const Matrix = () => {
-  const member = localStorage.getItem("Members");
-  const { first, second, third, fourth }: Member = JSON.parse(member!);
-  const [editRowsModel, setEditRowsModel] = useState();
+  const members = localStorage.getItem("Members");
+  const rules = localStorage.getItem("Rules");
+  const { first, second, third, fourth }: Member = JSON.parse(members!);
+  const { chip, yakitori, tobi }: Rules = JSON.parse(rules!);
+
+  const { points } = useContext(PointsContext);
 
   const columns = [
     { field: "id", headerName: "ID", width: 50 },
@@ -82,7 +44,7 @@ export const Matrix = () => {
       width: 100,
       sortable: false,
       editable: true,
-      renderCell: () => <SelectBet />,
+      renderCell: (params: any) => <SelectBet params={params} />,
     },
     {
       field: "member1",
@@ -118,8 +80,47 @@ export const Matrix = () => {
     },
   ];
   return (
-    <div style={{ height: 400, width: 800 }}>
+    <div style={{ height: 400, width: 800, margin: 10 }}>
+      <Grid container columns={2} direction="column">
+        {chip && (
+          <FormControl variant="standard" sx={{ m: 1, mt: 3, width: "15ch" }}>
+            <FormHelperText id="standard-weight-helper-text">
+              チップ
+            </FormHelperText>
+            <Input
+              id="standard-adornment-weight"
+              endAdornment={<InputAdornment position="end">kg</InputAdornment>}
+              aria-describedby="standard-weight-helper-text"
+            />
+          </FormControl>
+        )}
+        {yakitori && (
+          <FormControl variant="standard" sx={{ m: 1, mt: 3, width: "15ch" }}>
+            <FormHelperText id="standard-weight-helper-text">
+              焼き鳥
+            </FormHelperText>
+            <Input
+              id="standard-adornment-weight"
+              endAdornment={<InputAdornment position="end">kg</InputAdornment>}
+              aria-describedby="standard-weight-helper-text"
+            />
+          </FormControl>
+        )}
+        {tobi && (
+          <FormControl variant="standard" sx={{ m: 1, mt: 3, width: "15ch" }}>
+            <FormHelperText id="standard-weight-helper-text">
+              飛び賞
+            </FormHelperText>
+            <Input
+              id="standard-adornment-weight"
+              endAdornment={<InputAdornment position="end">kg</InputAdornment>}
+              aria-describedby="standard-weight-helper-text"
+            />
+          </FormControl>
+        )}
+      </Grid>
       <DataGrid rows={rows} columns={columns} pageSize={5} editMode="row" />
+      <Box>{`トータル: ${points[0].member1}`}</Box>
     </div>
   );
 };
