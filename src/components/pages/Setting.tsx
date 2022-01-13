@@ -9,6 +9,12 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/system";
 
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
 const M_Typography = styled(Typography)({
   marginTop: "1em",
 });
@@ -19,6 +25,7 @@ type Props = {
 
 export const Setting: FC<Props> = (props) => {
   const { onComplate } = props;
+  const [open, setOpen] = useState(false);
   const [members, setMembers] = useState({
     first: "",
     second: "",
@@ -40,22 +47,53 @@ export const Setting: FC<Props> = (props) => {
 
   const onSetMembers = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
+    let menberName = "";
     const number = e.target.name;
-    const tempMembers = { ...members, [number]: e.target.value }; //[]をつけないと新たにnumberというKeyができる
-    console.log(tempMembers);
+    console.log(e.target.value);
+    console.log(typeof e.target.value);
+    e.target.value === " "
+      ? (menberName = "無し")
+      : (menberName = e.target.value);
+    const tempMembers = { ...members, [number]: menberName }; //[]をつけないと新たにnumberというKeyができる
     setMembers(tempMembers);
   };
 
-  const onLocalStorageAdd = (e: FormEvent) => {
+  const onLocalStorageAdd = async (e: FormEvent) => {
     e.preventDefault();
-    onComplate();
-    localStorage.setItem("Members", JSON.stringify(members)); //JSON.stringifyで文字列に変換することでオブジェクトも保存できる
+    let tempMembers;
+    const res = await inputCheck();
+    if (!res) {
+      handleClickOpen();
+      return;
+    }
+    if (members.fourth === "") {
+      tempMembers = { ...members, fourth: "無し" };
+    }
+
+    localStorage.setItem("Members", JSON.stringify(tempMembers)); //JSON.stringifyで文字列に変換することでオブジェクトも保存できる
     localStorage.setItem("Rules", JSON.stringify(rule));
+    onComplate();
   };
 
   const onLocalStorageClear = () => {
     localStorage.removeItem("Members");
     localStorage.removeItem("Rules");
+  };
+
+  const inputCheck = async () => {
+    if (members.first === "" || members.second === "" || members.third === "") {
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -182,6 +220,24 @@ export const Setting: FC<Props> = (props) => {
           </Button>
         </Box>
       </form>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"エラー"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            3人は入力してください
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

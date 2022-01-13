@@ -12,6 +12,7 @@ export const InputBet: FC<Props> = (props) => {
   const { fieldName, id } = props;
   return (
     <Input
+      type="number"
       sx={{ textAlign: "right" }}
       // value={points[0].member1}
       // onChange={handleChange("member1")}
