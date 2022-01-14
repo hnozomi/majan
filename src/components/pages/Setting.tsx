@@ -176,6 +176,7 @@ export const Setting: FC<Props> = (props) => {
             name="chip"
           />
         </FormGroup>
+        {rule.chip && <p>チップありです</p>}
         <M_Typography>焼き鳥</M_Typography>
         <FormGroup>
           <FormControlLabel

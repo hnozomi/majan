@@ -14,8 +14,6 @@ export const InputBet: FC<Props> = (props) => {
     <Input
       type="number"
       sx={{ textAlign: "right" }}
-      // value={points[0].member1}
-      // onChange={handleChange("member1")}
       onChange={(e) => updateMatrix(e, id, fieldName)}
       endAdornment={<InputAdornment position="end">pt</InputAdornment>}
       inputProps={{

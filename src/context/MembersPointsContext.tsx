@@ -31,13 +31,7 @@ export const PointsProvider = (props: any) => {
   }, []);
 
   const createMatrix = () => {
-    // const handleChange = (prop: any) => (event: any) => {
-    //     setPoint({ ...point[params.id], [prop]: event.target.value });
-    // };
-    const params = {
-      id: 3,
-    };
-    const array: any[] = new Array(params.id).fill({
+    const array: any[] = new Array(3).fill({
       bet: "",
       member1: null,
       member2: null,

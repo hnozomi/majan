@@ -7,6 +7,7 @@ import {
   FormControl,
   FormHelperText,
   Grid,
+  TableHead,
   Typography,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
@@ -24,6 +25,7 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
+import { ChangeEvent } from "react";
 
 type Member = {
   first: string;
@@ -49,6 +51,13 @@ type Result = {
 
 export const Matrix = () => {
   const [kaeshi, setKaeshi] = useState(0);
+  const [perChip, setPerChip] = useState(0);
+  const [totalChip, setTotalChip] = useState<Result>({
+    member1: 0,
+    member2: 0,
+    member3: 0,
+    member4: 0,
+  });
   const members = localStorage.getItem("Members");
   const rules = localStorage.getItem("Rules");
   const {
@@ -114,21 +123,33 @@ export const Matrix = () => {
   ];
 
   const calculatePoints = () => {
-    let member1Total: number = 0;
-    let member2Total: number = 0;
-    let member3Total: number = 0;
-    let member4Total: number = 0;
+    let member1Total: number = totalChip.member1 * perChip;
+    let member2Total: number = totalChip.member2 * perChip;
+    let member3Total: number = totalChip.member3 * perChip;
+    let member4Total: number = totalChip.member4 * perChip;
+    let total: number = 0;
+
     for (var i = 0; i < points.length; i++) {
       const bet = points[i].bet.slice(1) / 100;
-      const pt1 = Number(points[i].member1) - 40000;
-      const pt2 = Number(points[i].member2) - 40000;
-      const pt3 = Number(points[i].member3) - 40000;
-      const pt4 = Number(points[i].member4) - 40000;
-      member1Total = member1Total + pt1 * bet;
-      member2Total = member2Total + pt2 * bet;
-      member3Total = member3Total + pt3 * bet;
-      member4Total = member4Total + pt4 * bet;
+      if (points[i].member1 !== null) {
+        const pt1 = Number(points[i].member1) - kaeshi;
+        console.log(member1Total);
+        member1Total = member1Total + pt1 * bet;
+      }
+      if (points[i].member2 !== null) {
+        const pt2 = Number(points[i].member2) - kaeshi;
+        member2Total = member2Total + pt2 * bet;
+      }
+      if (points[i].member3 !== null) {
+        const pt3 = Number(points[i].member3) - kaeshi;
+        member3Total = member3Total + pt3 * bet;
+      }
+      if (points[i].member4 !== null) {
+        const pt4 = points[i].member4 - kaeshi;
+        member4Total = member4Total + pt4 * bet;
+      }
     }
+
     setResult({
       ...result,
       member1: member1Total,
@@ -144,6 +165,22 @@ export const Matrix = () => {
     setRows([...rows, addRows]);
   };
 
+  const onChipTotal = (e: ChangeEvent<HTMLInputElement>) => {
+    setTotalChip({
+      ...totalChip,
+      [e.target.name]: Number(e.target.value) - 20,
+    });
+  };
+
+  // const onPerChip = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setPerChip(Number(e.target.value));
+  // };
+  // const onPerChip = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setPerChip(Number(e.target.value));
+  // };
+
+  console.log(perChip);
+
   return (
     <div style={{ height: 400 }}>
       <Grid container sx={{ width: "100%" }}>
@@ -155,6 +192,8 @@ export const Matrix = () => {
               </FormHelperText>
               <Input
                 id="standard-adornment-weight"
+                name="chip"
+                onChange={(e) => setPerChip(Number(e.target.value))}
                 endAdornment={
                   <InputAdornment position="end">/枚</InputAdornment>
                 }
@@ -242,30 +281,79 @@ export const Matrix = () => {
         sx={{ mb: 5, p: 2, boxSizing: "border-box" }}
       >
         <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ width: 70 }}>メンバー</TableCell>
+              <TableCell sx={{ width: 100 }} align="left">
+                チップ枚数
+              </TableCell>
+              <TableCell align="right">合計</TableCell>
+            </TableRow>
+          </TableHead>
           <TableBody>
             <TableRow>
               <TableCell component="th" scope="row">
                 {first}
               </TableCell>
-              <TableCell align="left">{`${result.member1}円`}</TableCell>
+              <TableCell component="th" scope="row">
+                <Input
+                  type="number"
+                  name="member1"
+                  onChange={onChipTotal}
+                  endAdornment={
+                    <InputAdornment position="end">枚</InputAdornment>
+                  }
+                />
+              </TableCell>
+              <TableCell align="right">{`${result.member1}円`}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell component="th" scope="row">
                 {second}
               </TableCell>
-              <TableCell align="left">{`${result.member2}円`}</TableCell>
+              <TableCell component="th" scope="row">
+                <Input
+                  type="number"
+                  name="member2"
+                  onChange={onChipTotal}
+                  endAdornment={
+                    <InputAdornment position="end">枚</InputAdornment>
+                  }
+                />
+              </TableCell>
+              <TableCell align="right">{`${result.member2}円`}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell component="th" scope="row">
                 {third}
               </TableCell>
-              <TableCell align="left">{`${result.member3}円`}</TableCell>
+              <TableCell component="th" scope="row">
+                <Input
+                  type="number"
+                  name="member3"
+                  onChange={onChipTotal}
+                  endAdornment={
+                    <InputAdornment position="end">枚</InputAdornment>
+                  }
+                />
+              </TableCell>
+              <TableCell align="right">{`${result.member3}円`}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell component="th" scope="row">
                 {fourth}
               </TableCell>
-              <TableCell align="left">{`${result.member4}円`}</TableCell>
+              <TableCell component="th" scope="row">
+                <Input
+                  type="number"
+                  name="member4"
+                  onChange={onChipTotal}
+                  endAdornment={
+                    <InputAdornment position="end">枚</InputAdornment>
+                  }
+                />
+              </TableCell>
+              <TableCell align="right">{`${result.member4}円`}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
