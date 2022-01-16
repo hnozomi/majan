@@ -69,18 +69,24 @@ export const PointsProvider = (props: any) => {
     const test = { ...points[id - 1] }; //配列から対象のIndex部分のみ抜き出す  [0]のみ抽出
     // console.log(test, "3test");
     console.log(test);
-    const temp = { ...test, [fieldName]: e.target.value }; //対象の値を変更する [0]のfieldNameの値を変更
-    console.log(temp);
-    // console.log(temp, "temp");
-    // console.log({ ...points[id], [fieldName]: e.target.value });
-    // console.log(id);
-    // console.log({ ...points, [id - 1]: temp });
-    // setPoints([...points, temp]);
-    console.log(id - 1);
-    points[id - 1] = temp; // index[0]を更新した情報(temp)で更新する
-    console.log(points);
-    setPoints([...points]); //index[0]に変更した値を戻したい
-    // setPoints([{ ...points[id], [fieldName]: e.target.value }]);
+    if (e.target.value === "") {
+      const temp = { ...test, [fieldName]: 0 };
+      points[id - 1] = temp;
+      setPoints([...points]);
+    } else {
+      const temp = { ...test, [fieldName]: e.target.value }; //対象の値を変更する [0]のfieldNameの値を変更
+      console.log(temp);
+      // console.log(temp, "temp");
+      // console.log({ ...points[id], [fieldName]: e.target.value });
+      // console.log(id);
+      // console.log({ ...points, [id - 1]: temp });
+      // setPoints([...points, temp]);
+      console.log(id - 1);
+      points[id - 1] = temp; // index[0]を更新した情報(temp)で更新する
+      console.log(points);
+      setPoints([...points]); //index[0]に変更した値を戻したい
+      // setPoints([{ ...points[id], [fieldName]: e.target.value }]);
+    }
   };
 
   console.log(points);

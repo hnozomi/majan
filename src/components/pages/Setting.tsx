@@ -14,6 +14,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { Input, InputAdornment } from "@mui/material";
+import { InputLabel } from "@mui/material";
 
 const M_Typography = styled(Typography)({
   marginTop: "1em",
@@ -25,6 +27,12 @@ type Props = {
 
 export const Setting: FC<Props> = (props) => {
   const { onComplate } = props;
+  const [kaeshi, setKaeshi] = useState(0);
+  const [modalMessage, setModalMessage] = useState("");
+  const [chipInfomation, setChipInfomation] = useState({
+    total: "",
+    money: "",
+  });
   const [open, setOpen] = useState(false);
   const [members, setMembers] = useState({
     first: "",
@@ -49,8 +57,6 @@ export const Setting: FC<Props> = (props) => {
     e.preventDefault();
     let menberName = "";
     const number = e.target.name;
-    console.log(e.target.value);
-    console.log(typeof e.target.value);
     e.target.value === " "
       ? (menberName = "無し")
       : (menberName = e.target.value);
@@ -61,31 +67,42 @@ export const Setting: FC<Props> = (props) => {
   const onLocalStorageAdd = async (e: FormEvent) => {
     e.preventDefault();
     let tempMembers;
-    const res = await inputCheck();
-    if (!res) {
+    const { check, message } = await inputCheck();
+    if (!check) {
+      setModalMessage(message);
       handleClickOpen();
       return;
     }
     if (members.fourth === "") {
-      tempMembers = { ...members, fourth: "無し" };
+      // tempMembers = { ...members, fourth: "無し" };
+      setMembers({ ...members, fourth: "無し" });
     }
 
-    localStorage.setItem("Members", JSON.stringify(tempMembers)); //JSON.stringifyで文字列に変換することでオブジェクトも保存できる
+    localStorage.setItem("Kaeshi", JSON.stringify(kaeshi)); //JSON.stringifyで文字列に変換することでオブジェクトも保存できる
+    localStorage.setItem("Chip", JSON.stringify(chipInfomation)); //JSON.stringifyで文字列に変換することでオブジェクトも保存できる
+    localStorage.setItem("Members", JSON.stringify(members)); //JSON.stringifyで文字列に変換することでオブジェクトも保存できる
     localStorage.setItem("Rules", JSON.stringify(rule));
     onComplate();
   };
 
-  const onLocalStorageClear = () => {
-    localStorage.removeItem("Members");
-    localStorage.removeItem("Rules");
-  };
-
   const inputCheck = async () => {
     if (members.first === "" || members.second === "" || members.third === "") {
-      return false;
+      return { check: false, message: "3人は入力してください" };
     }
 
-    return true;
+    if (kaeshi === 0) {
+      return { check: false, message: "返し点数を入力してください" };
+    }
+
+    if (rule.chip === true) {
+      if (chipInfomation.total === "") {
+        return { check: false, message: "チップの配布枚数を入力してください" };
+      }
+      if (chipInfomation.money === "") {
+        return { check: false, message: "チップの金額を入力してください" };
+      }
+    }
+    return { check: true, message: "問題ありません" };
   };
 
   const handleClickOpen = () => {
@@ -94,6 +111,10 @@ export const Setting: FC<Props> = (props) => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const onChipInformation = (e: ChangeEvent<HTMLInputElement>) => {
+    setChipInfomation({ ...chipInfomation, [e.target.name]: e.target.value });
   };
 
   return (
@@ -107,13 +128,6 @@ export const Setting: FC<Props> = (props) => {
         }}
       >
         <Typography variant="h4">設定</Typography>
-        <Button
-          sx={{ mt: 1, mb: 1 }}
-          variant="contained"
-          onClick={onLocalStorageClear}
-        >
-          クリアする
-        </Button>
       </Box>
 
       <form onSubmit={onLocalStorageAdd}>
@@ -157,6 +171,14 @@ export const Setting: FC<Props> = (props) => {
           />
         </Grid>
 
+        <M_Typography>返し</M_Typography>
+        <Input
+          type="number"
+          name="member4"
+          // onChange={onChipTotal}
+          onChange={(e) => setKaeshi(Number(e.target.value))}
+          endAdornment={<InputAdornment position="end">点</InputAdornment>}
+        />
         <M_Typography>チップ</M_Typography>
         <FormGroup>
           <FormControlLabel
@@ -176,8 +198,38 @@ export const Setting: FC<Props> = (props) => {
             name="chip"
           />
         </FormGroup>
-        {rule.chip && <p>チップありです</p>}
-        <M_Typography>焼き鳥</M_Typography>
+        {rule.chip && (
+          <Box sx={{ flexGrow: 1 }}>
+            <Grid container sx={{ alignItems: "center", mt: 2 }}>
+              {/* <Grid xs={2}>配布数</Grid> */}
+              <Grid>
+                <InputLabel>配布数</InputLabel>
+                <Input
+                  type="number"
+                  name="total"
+                  onChange={onChipInformation}
+                  endAdornment={
+                    <InputAdornment position="end">枚</InputAdornment>
+                  }
+                />
+              </Grid>
+            </Grid>
+            <Grid container sx={{ alignItems: "center", mt: 2 }}>
+              <Grid>
+                <InputLabel>金額</InputLabel>
+                <Input
+                  type="number"
+                  name="money"
+                  onChange={onChipInformation}
+                  endAdornment={
+                    <InputAdornment position="end">枚</InputAdornment>
+                  }
+                />
+              </Grid>
+            </Grid>
+          </Box>
+        )}
+        {/* <M_Typography>焼き鳥</M_Typography>
         <FormGroup>
           <FormControlLabel
             control={<Checkbox defaultChecked />}
@@ -214,7 +266,7 @@ export const Setting: FC<Props> = (props) => {
             onChange={onSetRules}
             name="tobi"
           />
-        </FormGroup>
+        </FormGroup> */}
         <Box sx={{ textAlign: "right" }}>
           <Button variant="contained" type="submit">
             登録
@@ -230,7 +282,7 @@ export const Setting: FC<Props> = (props) => {
         <DialogTitle id="alert-dialog-title">{"エラー"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            3人は入力してください
+            {modalMessage}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

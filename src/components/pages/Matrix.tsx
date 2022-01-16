@@ -27,6 +27,12 @@ import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import { ChangeEvent } from "react";
 
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
 type Member = {
   first: string;
   second: string;
@@ -49,8 +55,22 @@ type Result = {
 
 // const rows = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
-export const Matrix = () => {
-  const [kaeshi, setKaeshi] = useState(0);
+type Props = {
+  setComplete: any;
+};
+
+export const Matrix = (props: Props) => {
+  const { setComplete } = props;
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  // const [kaeshi, setKaeshi] = useState(0);
   const [perChip, setPerChip] = useState(0);
   const [totalChip, setTotalChip] = useState<Result>({
     member1: 0,
@@ -60,6 +80,10 @@ export const Matrix = () => {
   });
   const members = localStorage.getItem("Members");
   const rules = localStorage.getItem("Rules");
+  // const tempKaeshi = localStorage.getItem("Kaeshi");
+  // const kaeshi = Number(tempKaeshi);
+  // const tempChipInfomation = localStorage.getItem("Chip");
+  // const { total, money } = JSON.parse(tempChipInfomation!);
   const {
     first = "なし",
     second = "なし",
@@ -123,29 +147,32 @@ export const Matrix = () => {
   ];
 
   const calculatePoints = () => {
-    let member1Total: number = totalChip.member1 * perChip;
-    let member2Total: number = totalChip.member2 * perChip;
-    let member3Total: number = totalChip.member3 * perChip;
-    let member4Total: number = totalChip.member4 * perChip;
-    let total: number = 0;
+    // let member1Total: number = totalChip.member1 * money;
+    // let member2Total: number = totalChip.member2 * money;
+    // let member3Total: number = totalChip.member3 * money;
+    // let member4Total: number = totalChip.member4 * money;
+    let member1Total: number = totalChip.member1 * 200;
+    let member2Total: number = totalChip.member2 * 200;
+    let member3Total: number = totalChip.member3 * 200;
+    let member4Total: number = totalChip.member4 * 200;
 
     for (var i = 0; i < points.length; i++) {
       const bet = points[i].bet.slice(1) / 100;
       if (points[i].member1 !== null) {
-        const pt1 = Number(points[i].member1) - kaeshi;
+        const pt1 = Number(points[i].member1) - 40000;
         console.log(member1Total);
         member1Total = member1Total + pt1 * bet;
       }
       if (points[i].member2 !== null) {
-        const pt2 = Number(points[i].member2) - kaeshi;
+        const pt2 = Number(points[i].member2) - 40000;
         member2Total = member2Total + pt2 * bet;
       }
       if (points[i].member3 !== null) {
-        const pt3 = Number(points[i].member3) - kaeshi;
+        const pt3 = Number(points[i].member3) - 40000;
         member3Total = member3Total + pt3 * bet;
       }
       if (points[i].member4 !== null) {
-        const pt4 = points[i].member4 - kaeshi;
+        const pt4 = points[i].member4 - 40000;
         member4Total = member4Total + pt4 * bet;
       }
     }
@@ -172,19 +199,20 @@ export const Matrix = () => {
     });
   };
 
-  // const onPerChip = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setPerChip(Number(e.target.value));
-  // };
-  // const onPerChip = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setPerChip(Number(e.target.value));
-  // };
-
-  console.log(perChip);
+  const onLocalStorageClear = () => {
+    localStorage.removeItem("Members");
+    localStorage.removeItem("Rules");
+    localStorage.removeItem("Kaeshi");
+    localStorage.removeItem("Chip");
+    localStorage.removeItem("Complete");
+    setComplete(false);
+    setOpen(false);
+  };
 
   return (
     <div style={{ height: 400 }}>
       <Grid container sx={{ width: "100%" }}>
-        {chip && (
+        {/* {chip && (
           <Grid item xs={3}>
             <FormControl variant="standard" sx={{ m: 1, mt: 3, width: "8ch" }}>
               <FormHelperText id="standard-weight-helper-text">
@@ -193,6 +221,7 @@ export const Matrix = () => {
               <Input
                 id="standard-adornment-weight"
                 name="chip"
+                value={200}
                 onChange={(e) => setPerChip(Number(e.target.value))}
                 endAdornment={
                   <InputAdornment position="end">/枚</InputAdornment>
@@ -201,8 +230,8 @@ export const Matrix = () => {
               />
             </FormControl>
           </Grid>
-        )}
-        {yakitori && (
+        )} */}
+        {/* {yakitori && (
           <Grid item xs={3}>
             <FormControl variant="standard" sx={{ m: 1, mt: 3, width: "8ch" }}>
               <FormHelperText id="standard-weight-helper-text">
@@ -217,8 +246,8 @@ export const Matrix = () => {
               />
             </FormControl>
           </Grid>
-        )}
-        {tobi && (
+        )} */}
+        {/* {tobi && (
           <Grid item xs={3}>
             <FormControl variant="standard" sx={{ m: 1, mt: 3, width: "8ch" }}>
               <FormHelperText id="standard-weight-helper-text">
@@ -233,24 +262,22 @@ export const Matrix = () => {
               />
             </FormControl>
           </Grid>
-        )}
-        <Grid item xs={3}>
+        )} */}
+        {/* <Grid item xs={3}>
           <FormControl variant="standard" sx={{ m: 1, mt: 3, width: "8ch" }}>
             <FormHelperText id="standard-weight-helper-text">
               返し
             </FormHelperText>
             <Input
               id="standard-adornment-weight"
-              endAdornment={<InputAdornment position="end">pt</InputAdornment>}
+              value={kaeshi}
+              endAdornment={<InputAdornment position="end">点</InputAdornment>}
               aria-describedby="standard-weight-helper-text"
-              onChange={(e) => setKaeshi(Number(e.target.value))}
+              // onChange={(e) => setKaeshi(Number(e.target.value))}
             />
           </FormControl>
-        </Grid>
+        </Grid> */}
       </Grid>
-      {/* <Button variant="contained" onClick={addRows}>
-        行を追加する
-      </Button> */}
       <Box
         sx={{
           display: "flex",
@@ -258,6 +285,9 @@ export const Matrix = () => {
           p: 1,
         }}
       >
+        <Typography variant="h5" sx={{ p: 1, mr: 2 }}>
+          スコア表
+        </Typography>
         <AddCircleIcon onClick={addRows} />
         <Typography sx={{ verticalAlign: "middle" }}>行を追加する</Typography>
       </Box>
@@ -268,17 +298,25 @@ export const Matrix = () => {
         pageSize={5}
         editMode="row"
       />
-      <Box sx={{ textAlign: "right", p: 1 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          p: 1,
+          mt: 5,
+        }}
+      >
+        <Typography variant="h5" sx={{ p: 1 }}>
+          結果
+        </Typography>
         <Button variant="contained" onClick={calculatePoints}>
           計算する
         </Button>
       </Box>
-      <Typography variant="h5" sx={{ p: 1 }}>
-        結果
-      </Typography>
       <TableContainer
         component={Paper}
-        sx={{ mb: 5, p: 2, boxSizing: "border-box" }}
+        sx={{ mb: 5, p: 1, boxSizing: "border-box" }}
       >
         <Table aria-label="simple table">
           <TableHead>
@@ -358,6 +396,35 @@ export const Matrix = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Button
+        sx={{ mt: 1, mb: 1 }}
+        variant="contained"
+        onClick={() => setOpen(true)}
+        // onClick={onLocalStorageClear}
+      >
+        クリアする
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"クリアしてもいいですか"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            クリアすると、今回のスコア表が削除され設定画面に画面に戻ります
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>いいえ</Button>
+          <Button onClick={onLocalStorageClear} autoFocus>
+            はい
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
