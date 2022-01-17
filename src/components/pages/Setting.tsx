@@ -1,39 +1,47 @@
 import { FC, FormEvent, useState, ChangeEvent, SyntheticEvent } from "react";
 
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import TextField from "@mui/material/TextField";
-import { Grid, Typography } from "@mui/material";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
+import {
+  Grid,
+  Typography,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  TextField,
+  Button,
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Input,
+  InputLabel,
+  InputAdornment,
+} from "@mui/material";
 import { styled } from "@mui/system";
-
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import { Input, InputAdornment } from "@mui/material";
-import { InputLabel } from "@mui/material";
+// import { useFormValidation } from "../../hooks/useFormValidation";
+import { useAddToLocalStorage } from "../../hooks/useAddToLocalStorage";
 
 const M_Typography = styled(Typography)({
   marginTop: "1em",
 });
 
 type Props = {
-  onComplate: () => void;
+  onSettingComplate: () => void;
 };
 
 export const Setting: FC<Props> = (props) => {
-  const { onComplate } = props;
+  const { onSettingComplate } = props;
+  // const { settingFormValidation } = useFormValidation();
+  const { addToLocalStorage } = useAddToLocalStorage();
   const [kaeshi, setKaeshi] = useState(0);
   const [modalMessage, setModalMessage] = useState("");
-  const [chipInfomation, setChipInfomation] = useState({
-    total: "",
-    money: "",
-  });
   const [open, setOpen] = useState(false);
+  const [chipInfomation, setChipInfomation] = useState({
+    hasChip: false,
+    total: 0,
+    money: 0,
+  });
   const [members, setMembers] = useState({
     first: "",
     second: "",
@@ -41,16 +49,14 @@ export const Setting: FC<Props> = (props) => {
     fourth: "",
   });
 
-  const [rule, setRule] = useState({
-    chip: true,
-    yakitori: true,
-    tobi: true,
-  });
-
-  const onSetRules = (e: SyntheticEvent<EventTarget>) => {
+  const onSetChip = (e: SyntheticEvent<EventTarget>) => {
     const targetValue = e.target as HTMLInputElement;
     const check = targetValue.value === "true" ? true : false;
-    setRule({ ...rule, [targetValue.name]: check });
+    setChipInfomation({ ...chipInfomation, [targetValue.name]: check });
+  };
+
+  const onChipInformation = (e: ChangeEvent<HTMLInputElement>) => {
+    setChipInfomation({ ...chipInfomation, [e.target.name]: e.target.value });
   };
 
   const onSetMembers = (e: ChangeEvent<HTMLInputElement>) => {
@@ -64,46 +70,28 @@ export const Setting: FC<Props> = (props) => {
     setMembers(tempMembers);
   };
 
-  const onLocalStorageAdd = async (e: FormEvent) => {
-    e.preventDefault();
-    let tempMembers;
-    const { check, message } = await inputCheck();
-    if (!check) {
-      setModalMessage(message);
-      handleClickOpen();
-      return;
-    }
-    if (members.fourth === "") {
-      // tempMembers = { ...members, fourth: "無し" };
-      setMembers({ ...members, fourth: "無し" });
-    }
+  // const onLocalStorageAdd = async (e: FormEvent) => {
+  //   e.preventDefault();
+  //   const { check, message } = await settingFormValidation({
+  //     members: members,
+  //     kaeshi: kaeshi,
+  //     chipInfomation: chipInfomation,
+  //   });
+  //   if (!check) {
+  //     setModalMessage(message);
+  //     handleClickOpen();
+  //     return;
+  //   }
+  //   if (members.fourth === "") {
+  //     setMembers({ ...members, fourth: "無し" });
+  //   }
 
-    localStorage.setItem("Kaeshi", JSON.stringify(kaeshi)); //JSON.stringifyで文字列に変換することでオブジェクトも保存できる
-    localStorage.setItem("Chip", JSON.stringify(chipInfomation)); //JSON.stringifyで文字列に変換することでオブジェクトも保存できる
-    localStorage.setItem("Members", JSON.stringify(members)); //JSON.stringifyで文字列に変換することでオブジェクトも保存できる
-    localStorage.setItem("Rules", JSON.stringify(rule));
-    onComplate();
-  };
-
-  const inputCheck = async () => {
-    if (members.first === "" || members.second === "" || members.third === "") {
-      return { check: false, message: "3人は入力してください" };
-    }
-
-    if (kaeshi === 0) {
-      return { check: false, message: "返し点数を入力してください" };
-    }
-
-    if (rule.chip === true) {
-      if (chipInfomation.total === "") {
-        return { check: false, message: "チップの配布枚数を入力してください" };
-      }
-      if (chipInfomation.money === "") {
-        return { check: false, message: "チップの金額を入力してください" };
-      }
-    }
-    return { check: true, message: "問題ありません" };
-  };
+  //   localStorage.setItem("Kaeshi", JSON.stringify(kaeshi)); //JSON.stringifyで文字列に変換することでオブジェクトも保存できる
+  //   localStorage.setItem("Chip", JSON.stringify(chipInfomation));
+  //   localStorage.setItem("Members", JSON.stringify(members));
+  //   // localStorage.setItem("Rules", JSON.stringify(rule));
+  //   onSettingComplate();
+  // };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -111,10 +99,6 @@ export const Setting: FC<Props> = (props) => {
 
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const onChipInformation = (e: ChangeEvent<HTMLInputElement>) => {
-    setChipInfomation({ ...chipInfomation, [e.target.name]: e.target.value });
   };
 
   return (
@@ -130,7 +114,17 @@ export const Setting: FC<Props> = (props) => {
         <Typography variant="h4">設定</Typography>
       </Box>
 
-      <form onSubmit={onLocalStorageAdd}>
+      <form
+        onSubmit={(e) =>
+          addToLocalStorage(e, {
+            members: members,
+            kaeshi: kaeshi,
+            chipInfomation: chipInfomation,
+            setMembers: setMembers,
+            onSettingComplate: onSettingComplate,
+          })
+        }
+      >
         <Typography sx={{ mb: 1 }}>対戦相手</Typography>
         <Grid container columns={2} direction="column">
           <TextField
@@ -185,20 +179,20 @@ export const Setting: FC<Props> = (props) => {
             control={<Checkbox defaultChecked />}
             label="あり"
             value={true}
-            checked={rule.chip}
-            onChange={onSetRules}
-            name="chip"
+            checked={chipInfomation.hasChip}
+            onChange={onSetChip}
+            name="hasChip"
           />
           <FormControlLabel
             control={<Checkbox />}
             label="なし"
             value={false}
-            checked={!rule.chip}
-            onChange={onSetRules}
-            name="chip"
+            checked={!chipInfomation.hasChip}
+            onChange={onSetChip}
+            name="hasChip"
           />
         </FormGroup>
-        {rule.chip && (
+        {chipInfomation.hasChip && (
           <Box sx={{ flexGrow: 1 }}>
             <Grid container sx={{ alignItems: "center", mt: 2 }}>
               {/* <Grid xs={2}>配布数</Grid> */}
@@ -229,44 +223,6 @@ export const Setting: FC<Props> = (props) => {
             </Grid>
           </Box>
         )}
-        {/* <M_Typography>焼き鳥</M_Typography>
-        <FormGroup>
-          <FormControlLabel
-            control={<Checkbox defaultChecked />}
-            label="あり"
-            value={true}
-            checked={rule.yakitori}
-            onChange={onSetRules}
-            name="yakitori"
-          />
-          <FormControlLabel
-            control={<Checkbox />}
-            label="なし"
-            value={false}
-            checked={!rule.yakitori}
-            onChange={onSetRules}
-            name="yakitori"
-          />
-        </FormGroup>
-        <M_Typography>飛び賞</M_Typography>
-        <FormGroup>
-          <FormControlLabel
-            control={<Checkbox defaultChecked />}
-            label="あり"
-            value={true}
-            checked={rule.tobi}
-            onChange={onSetRules}
-            name="tobi"
-          />
-          <FormControlLabel
-            control={<Checkbox />}
-            label="なし"
-            value={false}
-            checked={!rule.tobi}
-            onChange={onSetRules}
-            name="tobi"
-          />
-        </FormGroup> */}
         <Box sx={{ textAlign: "right" }}>
           <Button variant="contained" type="submit">
             登録

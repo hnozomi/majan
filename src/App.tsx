@@ -3,24 +3,23 @@ import { Matrix } from "./components/pages/Matrix";
 import { Setting } from "./components/pages/Setting";
 import { PointsProvider } from "./context/MembersPointsContext";
 
+// 設定画面とスコア表画面を切り替える
+// ローカルストレージに保存しているCompleteで判断
+
 export const App = () => {
   const Complete = localStorage.getItem("Complete");
   const [complete, setComplete] = useState(Complete);
 
-  console.log(Complete);
-  console.log(complete);
-
-  const onComplate = () => {
+  const onSettingComplate = () => {
     localStorage.setItem("Complete", "true");
     setComplete("true");
   };
 
-  // return <Setting onComplate={onComplate} />;
   return complete ? (
     <PointsProvider>
       <Matrix setComplete={setComplete} />
     </PointsProvider>
   ) : (
-    <Setting onComplate={onComplate} />
+    <Setting onSettingComplate={onSettingComplate} />
   );
 };
