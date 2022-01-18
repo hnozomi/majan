@@ -1,106 +1,76 @@
-import { useContext, useState } from "react";
+import { useContext, useState, ChangeEvent, FC } from "react";
+
+import { DataGrid } from "@mui/x-data-grid";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 import {
-  Avatar,
   Box,
   Button,
-  FormControl,
-  FormHelperText,
   Grid,
   TableHead,
   Typography,
+  Input,
+  InputAdornment,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableContainer,
+  Paper,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import { Input, InputAdornment } from "@mui/material";
+
 import { SelectBet } from "../organize/SelectBet";
 import { DisplayPoints } from "../organize/DisplayPoints";
 import { PointsContext } from "../../context/MembersPointsContext";
-import { totalmem } from "os";
+import { useCalculatePoints } from "../../hooks/useCalculatePoints";
+import { Members } from "../../types/Members";
+import { ChipResults } from "../../types/ChipResults";
 
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableRow from "@mui/material/TableRow";
-import TableContainer from "@mui/material/TableContainer";
-import Paper from "@mui/material/Paper";
-import { ChangeEvent } from "react";
-
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-
-type Member = {
-  first: string;
-  second: string;
-  third: string;
-  fourth: string;
-};
-
-type Rules = {
-  chip: boolean;
-  yakitori: boolean;
-  tobi: boolean;
-};
-
-type Result = {
-  member1: number;
-  member2: number;
-  member3: number;
-  member4: number;
-};
-
-// const rows = [{ id: 1 }, { id: 2 }, { id: 3 }];
+// type Result = {
+//   member1: number;
+//   member2: number;
+//   member3: number;
+//   member4: number;
+// };
 
 type Props = {
   setComplete: any;
 };
 
-export const Matrix = (props: Props) => {
+export const Matrix: FC<Props> = (props) => {
   const { setComplete } = props;
+  const { points, updateRow } = useContext(PointsContext);
+  const { calculatePoints } = useCalculatePoints();
+
   const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-  // const [kaeshi, setKaeshi] = useState(0);
-  const [perChip, setPerChip] = useState(0);
-  const [totalChip, setTotalChip] = useState<Result>({
+  const [totalChip, setTotalChip] = useState<ChipResults>({
     member1: 0,
     member2: 0,
     member3: 0,
     member4: 0,
   });
+  const chipInfomation = localStorage.getItem("Chip");
+  const { hasChip, total, money } = JSON.parse(chipInfomation!);
   const members = localStorage.getItem("Members");
-  const rules = localStorage.getItem("Rules");
-  // const tempKaeshi = localStorage.getItem("Kaeshi");
-  // const kaeshi = Number(tempKaeshi);
-  // const tempChipInfomation = localStorage.getItem("Chip");
-  // const { total, money } = JSON.parse(tempChipInfomation!);
   const {
     first = "なし",
     second = "なし",
     third = "なし",
     fourth = "なし",
-  }: Member = JSON.parse(members!);
-  const { chip, yakitori, tobi }: Rules = JSON.parse(rules!);
+  }: Members = JSON.parse(members!);
   const [rows, setRows] = useState([{ id: 1 }, { id: 2 }, { id: 3 }]);
 
-  const { points, updateRow } = useContext(PointsContext);
-  const [result, setResult] = useState<Result>({
+  const [result, setResult] = useState<ChipResults>({
     member1: 0,
     member2: 0,
     member3: 0,
     member4: 0,
   });
-  // console.log(points.length);
 
   const columns = [
     { field: "id", headerName: "ID", width: 50 },
@@ -146,45 +116,40 @@ export const Matrix = (props: Props) => {
     },
   ];
 
-  const calculatePoints = () => {
-    // let member1Total: number = totalChip.member1 * money;
-    // let member2Total: number = totalChip.member2 * money;
-    // let member3Total: number = totalChip.member3 * money;
-    // let member4Total: number = totalChip.member4 * money;
-    let member1Total: number = totalChip.member1 * 200;
-    let member2Total: number = totalChip.member2 * 200;
-    let member3Total: number = totalChip.member3 * 200;
-    let member4Total: number = totalChip.member4 * 200;
+  // const calculatePoints = () => {
+  //   let member1Total: number = totalChip.member1 * money;
+  //   let member2Total: number = totalChip.member2 * money;
+  //   let member3Total: number = totalChip.member3 * money;
+  //   let member4Total: number = totalChip.member4 * money;
 
-    for (var i = 0; i < points.length; i++) {
-      const bet = points[i].bet.slice(1) / 100;
-      if (points[i].member1 !== null) {
-        const pt1 = Number(points[i].member1) - 40000;
-        console.log(member1Total);
-        member1Total = member1Total + pt1 * bet;
-      }
-      if (points[i].member2 !== null) {
-        const pt2 = Number(points[i].member2) - 40000;
-        member2Total = member2Total + pt2 * bet;
-      }
-      if (points[i].member3 !== null) {
-        const pt3 = Number(points[i].member3) - 40000;
-        member3Total = member3Total + pt3 * bet;
-      }
-      if (points[i].member4 !== null) {
-        const pt4 = points[i].member4 - 40000;
-        member4Total = member4Total + pt4 * bet;
-      }
-    }
+  //   for (var i = 0; i < points.length; i++) {
+  //     const bet = points[i].bet.slice(1) / 100;
+  //     if (points[i].member1 !== null) {
+  //       const pt1 = Number(points[i].member1) - 40000;
+  //       member1Total = member1Total + pt1 * bet;
+  //     }
+  //     if (points[i].member2 !== null) {
+  //       const pt2 = Number(points[i].member2) - 40000;
+  //       member2Total = member2Total + pt2 * bet;
+  //     }
+  //     if (points[i].member3 !== null) {
+  //       const pt3 = Number(points[i].member3) - 40000;
+  //       member3Total = member3Total + pt3 * bet;
+  //     }
+  //     if (points[i].member4 !== null) {
+  //       const pt4 = points[i].member4 - 40000;
+  //       member4Total = member4Total + pt4 * bet;
+  //     }
+  //   }
 
-    setResult({
-      ...result,
-      member1: member1Total,
-      member2: member2Total,
-      member3: member3Total,
-      member4: member4Total,
-    });
-  };
+  //   setResult({
+  //     ...result,
+  //     member1: member1Total,
+  //     member2: member2Total,
+  //     member3: member3Total,
+  //     member4: member4Total,
+  //   });
+  // };
 
   const addRows = () => {
     const addRows = { id: rows.length + 1 };
@@ -195,8 +160,12 @@ export const Matrix = (props: Props) => {
   const onChipTotal = (e: ChangeEvent<HTMLInputElement>) => {
     setTotalChip({
       ...totalChip,
-      [e.target.name]: Number(e.target.value) - 20,
+      [e.target.name]: Number(e.target.value) - total,
     });
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const onLocalStorageClear = () => {
@@ -231,52 +200,6 @@ export const Matrix = (props: Props) => {
             </FormControl>
           </Grid>
         )} */}
-        {/* {yakitori && (
-          <Grid item xs={3}>
-            <FormControl variant="standard" sx={{ m: 1, mt: 3, width: "8ch" }}>
-              <FormHelperText id="standard-weight-helper-text">
-                焼き鳥
-              </FormHelperText>
-              <Input
-                id="standard-adornment-weight"
-                endAdornment={
-                  <InputAdornment position="end">pt</InputAdornment>
-                }
-                aria-describedby="standard-weight-helper-text"
-              />
-            </FormControl>
-          </Grid>
-        )} */}
-        {/* {tobi && (
-          <Grid item xs={3}>
-            <FormControl variant="standard" sx={{ m: 1, mt: 3, width: "8ch" }}>
-              <FormHelperText id="standard-weight-helper-text">
-                飛び賞
-              </FormHelperText>
-              <Input
-                id="standard-adornment-weight"
-                endAdornment={
-                  <InputAdornment position="end">pt</InputAdornment>
-                }
-                aria-describedby="standard-weight-helper-text"
-              />
-            </FormControl>
-          </Grid>
-        )} */}
-        {/* <Grid item xs={3}>
-          <FormControl variant="standard" sx={{ m: 1, mt: 3, width: "8ch" }}>
-            <FormHelperText id="standard-weight-helper-text">
-              返し
-            </FormHelperText>
-            <Input
-              id="standard-adornment-weight"
-              value={kaeshi}
-              endAdornment={<InputAdornment position="end">点</InputAdornment>}
-              aria-describedby="standard-weight-helper-text"
-              // onChange={(e) => setKaeshi(Number(e.target.value))}
-            />
-          </FormControl>
-        </Grid> */}
       </Grid>
       <Box
         sx={{
@@ -310,7 +233,10 @@ export const Matrix = (props: Props) => {
         <Typography variant="h5" sx={{ p: 1 }}>
           結果
         </Typography>
-        <Button variant="contained" onClick={calculatePoints}>
+        <Button
+          variant="contained"
+          onClick={() => calculatePoints(points, totalChip)}
+        >
           計算する
         </Button>
       </Box>

@@ -10,8 +10,6 @@ type Props = {
 export const InputBet: FC<Props> = (props) => {
   const { updateMatrix, points } = useContext(PointsContext);
   const { fieldName, id } = props;
-  console.log(points, id, fieldName);
-  // console.log(points[id + 1][fieldName]);
   return (
     <Input
       type="number"

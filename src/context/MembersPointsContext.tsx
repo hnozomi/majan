@@ -89,7 +89,6 @@ export const PointsProvider = (props: any) => {
     }
   };
 
-  console.log(points);
   return (
     <PointsContext.Provider
       value={{
