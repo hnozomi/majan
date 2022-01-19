@@ -70,7 +70,7 @@ export const PointsProvider = (props: any) => {
     // console.log(test, "3test");
     console.log(test);
     if (e.target.value === "") {
-      const temp = { ...test, [fieldName]: 0 };
+      const temp = { ...test, [fieldName]: "" };
       points[id - 1] = temp;
       setPoints([...points]);
     } else {

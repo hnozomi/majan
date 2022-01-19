@@ -9,61 +9,42 @@ type Props = {
 };
 
 export const useCalculatePoints = () => {
-  console.log("useCalculatePoints実行");
   const kaeshi = Number(localStorage.getItem("Kaeshi"));
   const chipInfomation = localStorage.getItem("Chip");
   const { money } = JSON.parse(chipInfomation!);
-  const [total, setTotal] = useState({});
+
+  const pointTotal = (points: any, name: string) => {
+    const calculateResult: number = points.reduce(
+      (sum: number, element: any, index: number) => {
+        const bet = points[index].bet.slice(1) / 100;
+        const pt = Number(element[name]) - kaeshi;
+        const total = sum + pt * bet;
+        return total;
+      },
+      0
+    );
+
+    return calculateResult;
+  };
 
   const calculatePoints = (
     points: any,
     totalChip: ChipResults
   ): ChipResults => {
-    // チップの合計は先でも後でも計算結果は一緒になりそう
-    let member1Total: number = 100 * money;
-    let member2Total: number = 100 * money;
-    let member3Total: number = 100 * money;
-    let member4Total: number = 100 * money;
+    let member1Total: number = totalChip.member1 * money;
+    let member2Total: number = totalChip.member2 * money;
+    let member3Total: number = totalChip.member3 * money;
+    let member4Total: number = totalChip.member4 * money;
 
-    // 配列から1つだけ取り出して、別関数で計算する
+    const member1Result = pointTotal(points, "member1");
+    const member2Result = pointTotal(points, "member2");
+    const member3Result = pointTotal(points, "member3");
+    const member4Result = pointTotal(points, "member4");
 
-    for (var i = 0; i < points.length; i++) {
-      const bet = points[i].bet.slice(1) / 100;
-
-      if (points[i].member1 !== null) {
-        const pt1 = Number(points[i].member1) - kaeshi;
-        member1Total = member1Total + pt1 * bet;
-      }
-      // if (points[i].member2 !== null) {
-      //   const pt2 = Number(points[i].member2) - kaeshi;
-      //   member2Total = member2Total + pt2 * bet;
-      // }
-      // if (points[i].member3 !== null) {
-      //   const pt3 = Number(points[i].member3) - kaeshi;
-      //   member3Total = member3Total + pt3 * bet;
-      // }
-      // if (points[i].member4 !== null) {
-      //   const pt4 = points[i].member4 - kaeshi;
-      //   member4Total = member4Total + pt4 * bet;
-      // }
-      // setTotal({ ...total, [member1]: tempTotal });
-    }
-    // setResult({
-    //   ...result,
-    //   member1: member1Total,
-    //   member2: member2Total,
-    //   member3: member3Total,
-    //   member4: member4Total,
-    // });
-
-    const pointTotal = (point: any, bet: number) => {
-      for (var i = 0; i < points.length; i++) {
-        if (point.member1 !== null) {
-          const pt1 = Number(point.member1) - kaeshi;
-          member1Total = member1Total + pt1 * bet;
-        }
-      }
-    };
+    member1Total = member1Total + member1Result;
+    member2Total = member2Total + member2Result;
+    member3Total = member3Total + member3Result;
+    member4Total = member4Total + member4Result;
 
     return {
       member1: member1Total,

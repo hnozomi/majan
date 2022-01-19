@@ -178,6 +178,17 @@ export const Matrix: FC<Props> = (props) => {
     setOpen(false);
   };
 
+  const excuteCalculatePoints = () => {
+    const res = calculatePoints(points, totalChip);
+    setResult({
+      ...result,
+      member1: res.member1,
+      member2: res.member2,
+      member3: res.member3,
+      member4: res.member4,
+    });
+  };
+
   return (
     <div style={{ height: 400 }}>
       <Grid container sx={{ width: "100%" }}>
@@ -233,10 +244,7 @@ export const Matrix: FC<Props> = (props) => {
         <Typography variant="h5" sx={{ p: 1 }}>
           結果
         </Typography>
-        <Button
-          variant="contained"
-          onClick={() => calculatePoints(points, totalChip)}
-        >
+        <Button variant="contained" onClick={excuteCalculatePoints}>
           計算する
         </Button>
       </Box>
