@@ -6,7 +6,6 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import {
   Box,
   Button,
-  Grid,
   TableHead,
   Typography,
   Input,
@@ -30,13 +29,7 @@ import { PointsContext } from "../../context/MembersPointsContext";
 import { useCalculatePoints } from "../../hooks/useCalculatePoints";
 import { Members } from "../../types/Members";
 import { ChipResults } from "../../types/ChipResults";
-
-// type Result = {
-//   member1: number;
-//   member2: number;
-//   member3: number;
-//   member4: number;
-// };
+import { MatrixTableRow } from "../organize/MatrixTableRow";
 
 type Props = {
   setComplete: any;
@@ -44,7 +37,22 @@ type Props = {
 
 export const Matrix: FC<Props> = (props) => {
   const { setComplete } = props;
+
   const { points, updateRow } = useContext(PointsContext);
+
+  const chipInfomation = localStorage.getItem("Chip");
+  const { total } = JSON.parse(chipInfomation!);
+  const members = localStorage.getItem("Members");
+  // const {
+  //   member1 = "なし",
+  //   member2 = "なし",
+  //   member3 = "なし",
+  //   member4 = "なし",
+  // }: Members = JSON.parse(members!);
+
+  const jsonMembers: Members = JSON.parse(members!);
+  console.log(jsonMembers);
+
   const { calculatePoints } = useCalculatePoints();
 
   const [open, setOpen] = useState(false);
@@ -54,23 +62,14 @@ export const Matrix: FC<Props> = (props) => {
     member3: 0,
     member4: 0,
   });
-  const chipInfomation = localStorage.getItem("Chip");
-  const { hasChip, total, money } = JSON.parse(chipInfomation!);
-  const members = localStorage.getItem("Members");
-  const {
-    first = "なし",
-    second = "なし",
-    third = "なし",
-    fourth = "なし",
-  }: Members = JSON.parse(members!);
-  const [rows, setRows] = useState([{ id: 1 }, { id: 2 }, { id: 3 }]);
-
   const [result, setResult] = useState<ChipResults>({
     member1: 0,
     member2: 0,
     member3: 0,
     member4: 0,
   });
+
+  const [rows, setRows] = useState([{ id: 1 }, { id: 2 }, { id: 3 }]);
 
   const columns = [
     { field: "id", headerName: "ID", width: 50 },
@@ -84,7 +83,7 @@ export const Matrix: FC<Props> = (props) => {
     },
     {
       field: "member1",
-      headerName: first,
+      headerName: jsonMembers.member1,
       sortable: false,
       width: 100,
       editable: true,
@@ -92,7 +91,7 @@ export const Matrix: FC<Props> = (props) => {
     },
     {
       field: "member2",
-      headerName: second,
+      headerName: jsonMembers.member2,
       sortable: false,
       width: 100,
       editable: true,
@@ -100,7 +99,7 @@ export const Matrix: FC<Props> = (props) => {
     },
     {
       field: "member3",
-      headerName: third,
+      headerName: jsonMembers.member3,
       sortable: false,
       width: 100,
       editable: true,
@@ -108,48 +107,13 @@ export const Matrix: FC<Props> = (props) => {
     },
     {
       field: "member4",
-      headerName: fourth,
+      headerName: jsonMembers.member4,
       sortable: false,
       width: 100,
       editable: true,
       renderCell: (params: any) => <DisplayPoints params={params} />,
     },
   ];
-
-  // const calculatePoints = () => {
-  //   let member1Total: number = totalChip.member1 * money;
-  //   let member2Total: number = totalChip.member2 * money;
-  //   let member3Total: number = totalChip.member3 * money;
-  //   let member4Total: number = totalChip.member4 * money;
-
-  //   for (var i = 0; i < points.length; i++) {
-  //     const bet = points[i].bet.slice(1) / 100;
-  //     if (points[i].member1 !== null) {
-  //       const pt1 = Number(points[i].member1) - 40000;
-  //       member1Total = member1Total + pt1 * bet;
-  //     }
-  //     if (points[i].member2 !== null) {
-  //       const pt2 = Number(points[i].member2) - 40000;
-  //       member2Total = member2Total + pt2 * bet;
-  //     }
-  //     if (points[i].member3 !== null) {
-  //       const pt3 = Number(points[i].member3) - 40000;
-  //       member3Total = member3Total + pt3 * bet;
-  //     }
-  //     if (points[i].member4 !== null) {
-  //       const pt4 = points[i].member4 - 40000;
-  //       member4Total = member4Total + pt4 * bet;
-  //     }
-  //   }
-
-  //   setResult({
-  //     ...result,
-  //     member1: member1Total,
-  //     member2: member2Total,
-  //     member3: member3Total,
-  //     member4: member4Total,
-  //   });
-  // };
 
   const addRows = () => {
     const addRows = { id: rows.length + 1 };
@@ -170,7 +134,6 @@ export const Matrix: FC<Props> = (props) => {
 
   const onLocalStorageClear = () => {
     localStorage.removeItem("Members");
-    localStorage.removeItem("Rules");
     localStorage.removeItem("Kaeshi");
     localStorage.removeItem("Chip");
     localStorage.removeItem("Complete");
@@ -191,27 +154,6 @@ export const Matrix: FC<Props> = (props) => {
 
   return (
     <div style={{ height: 400 }}>
-      <Grid container sx={{ width: "100%" }}>
-        {/* {chip && (
-          <Grid item xs={3}>
-            <FormControl variant="standard" sx={{ m: 1, mt: 3, width: "8ch" }}>
-              <FormHelperText id="standard-weight-helper-text">
-                チップ
-              </FormHelperText>
-              <Input
-                id="standard-adornment-weight"
-                name="chip"
-                value={200}
-                onChange={(e) => setPerChip(Number(e.target.value))}
-                endAdornment={
-                  <InputAdornment position="end">/枚</InputAdornment>
-                }
-                aria-describedby="standard-weight-helper-text"
-              />
-            </FormControl>
-          </Grid>
-        )} */}
-      </Grid>
       <Box
         sx={{
           display: "flex",
@@ -263,9 +205,29 @@ export const Matrix: FC<Props> = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow>
+            <MatrixTableRow
+              member={jsonMembers}
+              result={result}
+              onChipTotal={onChipTotal}
+            />
+            {/* <MatrixTableRow
+              member={member2}
+              result={result}
+              onChipTotal={onChipTotal}
+            />
+            <MatrixTableRow
+              member={member3}
+              result={result}
+              onChipTotal={onChipTotal}
+            />
+            <MatrixTableRow
+              member={member4}
+              result={result}
+              onChipTotal={onChipTotal}
+            /> */}
+            {/* <TableRow>
               <TableCell component="th" scope="row">
-                {first}
+                {member1}
               </TableCell>
               <TableCell component="th" scope="row">
                 <Input
@@ -281,7 +243,7 @@ export const Matrix: FC<Props> = (props) => {
             </TableRow>
             <TableRow>
               <TableCell component="th" scope="row">
-                {second}
+                {member2}
               </TableCell>
               <TableCell component="th" scope="row">
                 <Input
@@ -297,7 +259,7 @@ export const Matrix: FC<Props> = (props) => {
             </TableRow>
             <TableRow>
               <TableCell component="th" scope="row">
-                {third}
+                {member3}
               </TableCell>
               <TableCell component="th" scope="row">
                 <Input
@@ -313,7 +275,7 @@ export const Matrix: FC<Props> = (props) => {
             </TableRow>
             <TableRow>
               <TableCell component="th" scope="row">
-                {fourth}
+                {member4}
               </TableCell>
               <TableCell component="th" scope="row">
                 <Input
@@ -326,7 +288,7 @@ export const Matrix: FC<Props> = (props) => {
                 />
               </TableCell>
               <TableCell align="right">{`${result.member4}円`}</TableCell>
-            </TableRow>
+            </TableRow> */}
           </TableBody>
         </Table>
       </TableContainer>
@@ -334,7 +296,6 @@ export const Matrix: FC<Props> = (props) => {
         sx={{ mt: 1, mb: 1 }}
         variant="contained"
         onClick={() => setOpen(true)}
-        // onClick={onLocalStorageClear}
       >
         クリアする
       </Button>

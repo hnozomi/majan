@@ -1,12 +1,4 @@
-import { useState } from "react";
-import { PointsContext } from "../context/MembersPointsContext";
 import { ChipResults } from "../types/ChipResults";
-
-type Props = {
-  points: any;
-  totalChip: any;
-  calculatePoints: any;
-};
 
 export const useCalculatePoints = () => {
   const kaeshi = Number(localStorage.getItem("Kaeshi"));

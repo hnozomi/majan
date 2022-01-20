@@ -10,38 +10,45 @@ type Props = {
   chipInfomation: ChipInfomation;
   setMembers: any;
   onSettingComplate: any;
+  handleClickOpen: any;
+  setModalMessage: any;
 };
 
 export const useAddToLocalStorage = () => {
   const { settingFormValidation } = useFormValidation();
-  const [modalMessage, setModalMessage] = useState("");
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const addToLocalStorage = async (e: FormEvent, props: Props) => {
     e.preventDefault();
-    const { members, kaeshi, chipInfomation, setMembers, onSettingComplate } =
-      props;
+    const {
+      members,
+      kaeshi,
+      chipInfomation,
+      setMembers,
+      onSettingComplate,
+      handleClickOpen,
+      setModalMessage,
+    } = props;
+
     const { check, message } = await settingFormValidation({
       members: members,
       kaeshi: kaeshi,
       chipInfomation: chipInfomation,
     });
+    let updateMembers = {};
+    if (members.member4 === "") {
+      updateMembers = { ...members, member4: "無し" };
+      setMembers({ ...members, member4: "無し" });
+    }
+
     if (!check) {
       setModalMessage(message);
       handleClickOpen();
       return;
     }
-    if (members.fourth === "") {
-      setMembers({ ...members, fourth: "無し" });
-    }
 
     localStorage.setItem("Kaeshi", JSON.stringify(kaeshi)); //JSON.stringifyで文字列に変換することでオブジェクトも保存できる
     localStorage.setItem("Chip", JSON.stringify(chipInfomation));
-    localStorage.setItem("Members", JSON.stringify(members));
+    localStorage.setItem("Members", JSON.stringify(updateMembers));
     onSettingComplate();
   };
 

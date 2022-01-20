@@ -43,10 +43,10 @@ export const Setting: FC<Props> = (props) => {
     money: 0,
   });
   const [members, setMembers] = useState({
-    first: "",
-    second: "",
-    third: "",
-    fourth: "",
+    member1: "",
+    member2: "",
+    member3: "",
+    member4: "",
   });
 
   const onSetChip = (e: SyntheticEvent<EventTarget>) => {
@@ -61,37 +61,10 @@ export const Setting: FC<Props> = (props) => {
 
   const onSetMembers = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    let menberName = "";
     const number = e.target.name;
-    e.target.value === " "
-      ? (menberName = "無し")
-      : (menberName = e.target.value);
-    const tempMembers = { ...members, [number]: menberName }; //[]をつけないと新たにnumberというKeyができる
+    const tempMembers = { ...members, [number]: e.target.value }; //[]をつけないと新たにnumberというKeyができる
     setMembers(tempMembers);
   };
-
-  // const onLocalStorageAdd = async (e: FormEvent) => {
-  //   e.preventDefault();
-  //   const { check, message } = await settingFormValidation({
-  //     members: members,
-  //     kaeshi: kaeshi,
-  //     chipInfomation: chipInfomation,
-  //   });
-  //   if (!check) {
-  //     setModalMessage(message);
-  //     handleClickOpen();
-  //     return;
-  //   }
-  //   if (members.fourth === "") {
-  //     setMembers({ ...members, fourth: "無し" });
-  //   }
-
-  //   localStorage.setItem("Kaeshi", JSON.stringify(kaeshi)); //JSON.stringifyで文字列に変換することでオブジェクトも保存できる
-  //   localStorage.setItem("Chip", JSON.stringify(chipInfomation));
-  //   localStorage.setItem("Members", JSON.stringify(members));
-  //   // localStorage.setItem("Rules", JSON.stringify(rule));
-  //   onSettingComplate();
-  // };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -122,6 +95,8 @@ export const Setting: FC<Props> = (props) => {
             chipInfomation: chipInfomation,
             setMembers: setMembers,
             onSettingComplate: onSettingComplate,
+            handleClickOpen: handleClickOpen,
+            setModalMessage: setModalMessage,
           })
         }
       >
@@ -131,8 +106,8 @@ export const Setting: FC<Props> = (props) => {
             id="standard-basic"
             label="1人目"
             variant="standard"
-            value={members.first}
-            name="first"
+            value={members.member1}
+            name="member1"
             onChange={onSetMembers}
             sx={{ mb: 1 }}
           />
@@ -141,8 +116,8 @@ export const Setting: FC<Props> = (props) => {
             id="standard-basic"
             label="2人目"
             variant="standard"
-            value={members.second}
-            name="second"
+            value={members.member2}
+            name="member2"
             onChange={onSetMembers}
           />
           <TextField
@@ -150,8 +125,8 @@ export const Setting: FC<Props> = (props) => {
             id="standard-basic"
             label="3人目"
             variant="standard"
-            value={members.third}
-            name="third"
+            value={members.member3}
+            name="member3"
             onChange={onSetMembers}
           />
           <TextField
@@ -159,8 +134,8 @@ export const Setting: FC<Props> = (props) => {
             id="standard-basic"
             label="4人目"
             variant="standard"
-            value={members.fourth}
-            name="fourth"
+            value={members.member4}
+            name="member4"
             onChange={onSetMembers}
           />
         </Grid>

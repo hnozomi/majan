@@ -7,23 +7,15 @@ type Props = {
   chipInfomation: ChipInfomation;
 };
 
-// type Members = {
-//   first: string;
-//   second: string;
-//   third: string;
-//   fourth: string;
-// };
-
-// type ChipInfomation = {
-//   hasChip: boolean;
-//   total: number;
-//   money: number;
-// };
-
 export const useFormValidation = () => {
+  console.log("useFormValidation");
   const settingFormValidation = async (props: Props) => {
     const { members, kaeshi, chipInfomation } = props;
-    if (members.first === "" || members.second === "" || members.third === "") {
+    if (
+      members.member1 === "" ||
+      members.member2 === "" ||
+      members.member3 === ""
+    ) {
       return { check: false, message: "3人は入力してください" };
     }
 
@@ -42,6 +34,8 @@ export const useFormValidation = () => {
     }
     return { check: true, message: "問題ありません" };
   };
+
+  console.log("settingFormValidation");
 
   return { settingFormValidation };
 };
