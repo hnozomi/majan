@@ -21,6 +21,7 @@ import {
 import { styled } from "@mui/system";
 // import { useFormValidation } from "../../hooks/useFormValidation";
 import { useAddToLocalStorage } from "../../hooks/useAddToLocalStorage";
+import { Members } from "../../types/Members";
 
 const M_Typography = styled(Typography)({
   marginTop: "1em",
@@ -42,6 +43,12 @@ export const Setting: FC<Props> = (props) => {
     total: 0,
     money: 0,
   });
+  // const [members, setMembers] = useState<Members>([
+  //   { member1: "" },
+  //   { member2: "" },
+  //   { member3: "" },
+  //   { member4: "" },
+  // ]);
   const [members, setMembers] = useState({
     member1: "",
     member2: "",
@@ -60,6 +67,12 @@ export const Setting: FC<Props> = (props) => {
   };
 
   const onSetMembers = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    // const index: number = Number(e.target.name.slice(-1));
+    // const slicemember = { ...members[index - 1] };
+    // const newMember = { ...slicemember, [e.target.name]: e.target.value };
+    // members[index - 1] = newMember;
+    // setMembers([...members]);
     e.preventDefault();
     const number = e.target.name;
     const tempMembers = { ...members, [number]: e.target.value }; //[]をつけないと新たにnumberというKeyができる

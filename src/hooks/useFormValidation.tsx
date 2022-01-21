@@ -8,7 +8,6 @@ type Props = {
 };
 
 export const useFormValidation = () => {
-  console.log("useFormValidation");
   const settingFormValidation = async (props: Props) => {
     const { members, kaeshi, chipInfomation } = props;
     if (

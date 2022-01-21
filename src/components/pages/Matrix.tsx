@@ -50,7 +50,9 @@ export const Matrix: FC<Props> = (props) => {
   //   member4 = "なし",
   // }: Members = JSON.parse(members!);
 
-  const jsonMembers: Members = JSON.parse(members!);
+  console.log(members);
+  // const jsonMembers: Members = JSON.parse(members!);
+  const jsonMembers: any = JSON.parse(members!);
   console.log(jsonMembers);
 
   const { calculatePoints } = useCalculatePoints();
