@@ -2,14 +2,14 @@ import { createContext, useEffect, useState } from "react";
 
 export type MembersPointsType = {
   points: any;
-  updateMatrix: (e: any, id: any, fieldName: any) => void;
+  updateMatrix: (e: any, id: number, fieldName: string) => void;
   updateRow: () => void;
 };
 
 export const PointsContext = createContext<MembersPointsType>(
   {} as MembersPointsType
 );
-type Members = [
+type ScoreRowsType = [
   {
     bet: string;
     member1: number | null;
@@ -20,9 +20,8 @@ type Members = [
 ];
 
 export const PointsProvider = (props: any) => {
-  const { children, fieldName, id } = props;
-  const [loading, setLoading] = useState(false);
-  const [points, setPoints]: any = useState<Members>([
+  const { children } = props;
+  const [points, setPoints]: any = useState<ScoreRowsType>([
     { bet: "", member1: null, member2: null, member3: null, member4: null },
   ]);
 
@@ -58,34 +57,16 @@ export const PointsProvider = (props: any) => {
     setPoints([...points, row]);
   };
 
-  // const updateRow = () => {
-  //   for (var i = 0; i < points.length; i++) {
-  //     nullArray[i] = points[i];
-  //   }
-  //   setPoints(nullArray);
-  // };
-
-  const updateMatrix = (e: any, id: any, fieldName: any) => {
-    const test = { ...points[id - 1] }; //配列から対象のIndex部分のみ抜き出す  [0]のみ抽出
-    // console.log(test, "3test");
-    console.log(test);
+  const updateMatrix = (e: any, id: number, fieldName: string) => {
+    const sliceArray = { ...points[id - 1] }; //配列から対象のIndex部分のみ抜き出す  [id - 1]のみ抽出
     if (e.target.value === "") {
-      const temp = { ...test, [fieldName]: "" };
+      const temp = { ...sliceArray, [fieldName]: null };
       points[id - 1] = temp;
       setPoints([...points]);
     } else {
-      const temp = { ...test, [fieldName]: e.target.value }; //対象の値を変更する [0]のfieldNameの値を変更
-      console.log(temp);
-      // console.log(temp, "temp");
-      // console.log({ ...points[id], [fieldName]: e.target.value });
-      // console.log(id);
-      // console.log({ ...points, [id - 1]: temp });
-      // setPoints([...points, temp]);
-      console.log(id - 1);
+      const temp = { ...sliceArray, [fieldName]: e.target.value }; //対象の値を変更する [0]のfieldNameの値を変更
       points[id - 1] = temp; // index[0]を更新した情報(temp)で更新する
-      console.log(points);
       setPoints([...points]); //index[0]に変更した値を戻したい
-      // setPoints([{ ...points[id], [fieldName]: e.target.value }]);
     }
   };
 
@@ -97,7 +78,7 @@ export const PointsProvider = (props: any) => {
         updateMatrix,
       }}
     >
-      {!loading && children}
+      {children}
     </PointsContext.Provider>
   );
 };

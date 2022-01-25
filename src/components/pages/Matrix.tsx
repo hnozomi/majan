@@ -8,8 +8,6 @@ import {
   Button,
   TableHead,
   Typography,
-  Input,
-  InputAdornment,
   Table,
   TableBody,
   TableCell,
@@ -27,9 +25,9 @@ import { SelectBet } from "../organize/SelectBet";
 import { DisplayPoints } from "../organize/DisplayPoints";
 import { PointsContext } from "../../context/MembersPointsContext";
 import { useCalculatePoints } from "../../hooks/useCalculatePoints";
-import { Members } from "../../types/Members";
 import { ChipResults } from "../../types/ChipResults";
 import { MatrixTableRow } from "../organize/MatrixTableRow";
+import { Members } from "../../types/Members";
 
 type Props = {
   setComplete: any;
@@ -42,18 +40,9 @@ export const Matrix: FC<Props> = (props) => {
 
   const chipInfomation = localStorage.getItem("Chip");
   const { total } = JSON.parse(chipInfomation!);
-  const members = localStorage.getItem("Members");
-  // const {
-  //   member1 = "なし",
-  //   member2 = "なし",
-  //   member3 = "なし",
-  //   member4 = "なし",
-  // }: Members = JSON.parse(members!);
 
-  console.log(members);
-  // const jsonMembers: Members = JSON.parse(members!);
-  const jsonMembers: any = JSON.parse(members!);
-  console.log(jsonMembers);
+  const members = localStorage.getItem("Members");
+  const jsonMembers: Members = JSON.parse(members!);
 
   const { calculatePoints } = useCalculatePoints();
 
@@ -212,85 +201,6 @@ export const Matrix: FC<Props> = (props) => {
               result={result}
               onChipTotal={onChipTotal}
             />
-            {/* <MatrixTableRow
-              member={member2}
-              result={result}
-              onChipTotal={onChipTotal}
-            />
-            <MatrixTableRow
-              member={member3}
-              result={result}
-              onChipTotal={onChipTotal}
-            />
-            <MatrixTableRow
-              member={member4}
-              result={result}
-              onChipTotal={onChipTotal}
-            /> */}
-            {/* <TableRow>
-              <TableCell component="th" scope="row">
-                {member1}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                <Input
-                  type="number"
-                  name="member1"
-                  onChange={onChipTotal}
-                  endAdornment={
-                    <InputAdornment position="end">枚</InputAdornment>
-                  }
-                />
-              </TableCell>
-              <TableCell align="right">{`${result.member1}円`}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell component="th" scope="row">
-                {member2}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                <Input
-                  type="number"
-                  name="member2"
-                  onChange={onChipTotal}
-                  endAdornment={
-                    <InputAdornment position="end">枚</InputAdornment>
-                  }
-                />
-              </TableCell>
-              <TableCell align="right">{`${result.member2}円`}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell component="th" scope="row">
-                {member3}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                <Input
-                  type="number"
-                  name="member3"
-                  onChange={onChipTotal}
-                  endAdornment={
-                    <InputAdornment position="end">枚</InputAdornment>
-                  }
-                />
-              </TableCell>
-              <TableCell align="right">{`${result.member3}円`}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell component="th" scope="row">
-                {member4}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                <Input
-                  type="number"
-                  name="member4"
-                  onChange={onChipTotal}
-                  endAdornment={
-                    <InputAdornment position="end">枚</InputAdornment>
-                  }
-                />
-              </TableCell>
-              <TableCell align="right">{`${result.member4}円`}</TableCell>
-            </TableRow> */}
           </TableBody>
         </Table>
       </TableContainer>

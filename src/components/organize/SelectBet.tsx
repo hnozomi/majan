@@ -1,17 +1,13 @@
-import { useContext, useState } from "react";
-import { SelectChangeEvent } from "@mui/material";
+import { FC, useContext, useState } from "react";
 
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { FC } from "react";
+
 import { PointsContext } from "../../context/MembersPointsContext";
+import { betArrays } from "../../const/SelectBetConst";
 
 type Props = {
   params: any;
-};
-
-type BetType = {
-  id: number;
 };
 
 export const SelectBet: FC<Props> = (props) => {
@@ -26,10 +22,9 @@ export const SelectBet: FC<Props> = (props) => {
         sx={{ width: "100%" }}
         value={points[id - 1]?.bet}
         label="Bet"
-        // onChange={handleChange}
         onChange={(e) => updateMatrix(e, id, field)}
       >
-        {arrays.map((array, index) => (
+        {betArrays.map((array, index) => (
           <MenuItem sx={{ width: "100%" }} value={array} key={index}>
             {array}
           </MenuItem>
@@ -38,16 +33,3 @@ export const SelectBet: FC<Props> = (props) => {
     </>
   );
 };
-
-const arrays = [
-  "点1",
-  "点2",
-  "点3",
-  "点4",
-  "点5",
-  "点6",
-  "点7",
-  "点8",
-  "点9",
-  "点10",
-];

@@ -6,11 +6,15 @@ export const useCalculatePoints = () => {
   const { money } = JSON.parse(chipInfomation!);
 
   const pointTotal = (points: any, name: string) => {
+    let total = 0;
     const calculateResult: number = points.reduce(
       (sum: number, element: any, index: number) => {
         const bet = points[index].bet.slice(1) / 100;
-        const pt = Number(element[name]) - kaeshi;
-        const total = sum + pt * bet;
+
+        if (element[name] !== null) {
+          const pt = Number(element[name]) - kaeshi;
+          total = sum + pt * bet;
+        }
         return total;
       },
       0

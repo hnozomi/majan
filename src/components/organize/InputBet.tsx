@@ -1,5 +1,7 @@
-import { Input, InputAdornment } from "@mui/material";
 import { FC, useContext } from "react";
+
+import { Input, InputAdornment } from "@mui/material";
+
 import { PointsContext } from "../../context/MembersPointsContext";
 
 type Props = {
