@@ -13,7 +13,6 @@ type Props = {
 export const SelectBet: FC<Props> = (props) => {
   const { field, id } = props.params;
   const { points, updateMatrix } = useContext(PointsContext);
-  const [bet, setBet] = useState([{}]);
 
   return (
     <>

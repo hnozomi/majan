@@ -34,7 +34,5 @@ export const useFormValidation = () => {
     return { check: true, message: "問題ありません" };
   };
 
-  console.log("settingFormValidation");
-
   return { settingFormValidation };
 };

@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent } from "react";
 
 import { useFormValidation } from "../hooks/useFormValidation";
 import { ChipInfomation } from "../types/ChipInfomation";
@@ -6,7 +6,6 @@ import { Members } from "../types/Members";
 
 type Props = {
   members: Members;
-  // members: any;
   kaeshi: number;
   chipInfomation: ChipInfomation;
   setMembers: any;

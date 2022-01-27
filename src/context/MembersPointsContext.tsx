@@ -9,19 +9,29 @@ export type MembersPointsType = {
 export const PointsContext = createContext<MembersPointsType>(
   {} as MembersPointsType
 );
-type ScoreRowsType = [
-  {
-    bet: string;
-    member1: number | null;
-    member2: number | null;
-    member3: number | null;
-    member4: number | null;
-  }
-];
+
+type ScoreRowsType = {
+  bet: string;
+  member1: number | null;
+  member2: number | null;
+  member3: number | null;
+  member4: number | null;
+};
+// type ScoreRowsType = [
+//   {
+//     bet: string;
+//     member1: number | null;
+//     member2: number | null;
+//     member3: number | null;
+//     member4: number | null;
+//   }
+// ];
 
 export const PointsProvider = (props: any) => {
   const { children } = props;
-  const [points, setPoints]: any = useState<ScoreRowsType>([
+  //<Array<>> と <[]> は同じ
+  // const [points, setPoints] = useState<Array<ScoreRowsType>>([
+  const [points, setPoints] = useState<ScoreRowsType[]>([
     { bet: "", member1: null, member2: null, member3: null, member4: null },
   ]);
 
