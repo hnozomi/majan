@@ -4,6 +4,7 @@ import { Input, InputAdornment, TableCell, TableRow } from "@mui/material";
 
 import { ChipResults } from "../../types/ChipResults";
 import { Members } from "../../types/Members";
+import { UNIT } from "../../const/MatrixConst";
 
 type Props = {
   member: Members;
@@ -11,7 +12,7 @@ type Props = {
   onChipTotal: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export const MatrixTableRow = (props: Props) => {
+export const ResultMatrixTableRow = (props: Props) => {
   const { member, result, onChipTotal } = props;
 
   return (
@@ -31,11 +32,13 @@ export const MatrixTableRow = (props: Props) => {
                 name={key}
                 onChange={onChipTotal}
                 endAdornment={
-                  <InputAdornment position="end">枚</InputAdornment>
+                  <InputAdornment position="end">
+                    {UNIT.distribution}
+                  </InputAdornment>
                 }
               />
             </TableCell>
-            <TableCell align="right">{`${result[key]}円`}</TableCell>
+            <TableCell align="right">{`${result[key]}${UNIT.total}`}</TableCell>
           </TableRow>
         )
       )}

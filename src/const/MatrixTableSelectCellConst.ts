@@ -1,4 +1,4 @@
-export const betArrays = [
+export const BETARRAYS = [
     "点1",
     "点2",
     "点3",

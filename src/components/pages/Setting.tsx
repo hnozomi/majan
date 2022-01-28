@@ -21,6 +21,9 @@ import {
 import { styled } from "@mui/system";
 import { useAddToLocalStorage } from "../../hooks/useAddToLocalStorage";
 
+import { UNIT } from "../../const/MatrixConst";
+import { SETTING } from "../../const/SettingConst";
+
 const M_Typography = styled(Typography)({
   marginTop: "1em",
 });
@@ -83,7 +86,7 @@ export const Setting: FC<Props> = (props) => {
           mb: 3,
         }}
       >
-        <Typography variant="h4">設定</Typography>
+        <Typography variant="h4">{SETTING.header}</Typography>
       </Box>
 
       <form
@@ -99,16 +102,16 @@ export const Setting: FC<Props> = (props) => {
           })
         }
       >
-        <Typography sx={{ mb: 1 }}>対戦相手</Typography>
+        <Typography sx={{ mb: 1 }}>{SETTING.title1}</Typography>
         <Grid container columns={2} direction="column">
           <TextField
+            sx={{ mb: 1 }}
             id="standard-basic"
             label="1人目"
             variant="standard"
             value={members.member1}
             name="member1"
             onChange={onSetMembers}
-            sx={{ mb: 1 }}
           />
           <TextField
             sx={{ mb: 1 }}
@@ -139,15 +142,17 @@ export const Setting: FC<Props> = (props) => {
           />
         </Grid>
 
-        <M_Typography>返し</M_Typography>
+        <M_Typography>{SETTING.title2}</M_Typography>
         <Input
           type="number"
           name="member4"
           // onChange={onChipTotal}
           onChange={(e) => setKaeshi(Number(e.target.value))}
-          endAdornment={<InputAdornment position="end">点</InputAdornment>}
+          endAdornment={
+            <InputAdornment position="end">{UNIT.point}</InputAdornment>
+          }
         />
-        <M_Typography>チップ</M_Typography>
+        <M_Typography>{SETTING.title3}</M_Typography>
         <FormGroup>
           <FormControlLabel
             control={<Checkbox defaultChecked />}
@@ -171,26 +176,30 @@ export const Setting: FC<Props> = (props) => {
             <Grid container sx={{ alignItems: "center", mt: 2 }}>
               {/* <Grid xs={2}>配布数</Grid> */}
               <Grid>
-                <InputLabel>配布数</InputLabel>
+                <InputLabel>{SETTING.distribution}</InputLabel>
                 <Input
                   type="number"
                   name="total"
                   onChange={onChipInformation}
                   endAdornment={
-                    <InputAdornment position="end">枚</InputAdornment>
+                    <InputAdornment position="end">
+                      {UNIT.distribution}
+                    </InputAdornment>
                   }
                 />
               </Grid>
             </Grid>
             <Grid container sx={{ alignItems: "center", mt: 2 }}>
               <Grid>
-                <InputLabel>金額</InputLabel>
+                <InputLabel>{SETTING.cost}</InputLabel>
                 <Input
                   type="number"
                   name="money"
                   onChange={onChipInformation}
                   endAdornment={
-                    <InputAdornment position="end">枚</InputAdornment>
+                    <InputAdornment position="end">
+                      {UNIT.distribution}
+                    </InputAdornment>
                   }
                 />
               </Grid>
@@ -209,7 +218,9 @@ export const Setting: FC<Props> = (props) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"エラー"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          {SETTING.dialog_title}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             {modalMessage}

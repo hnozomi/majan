@@ -21,13 +21,15 @@ import {
   DialogTitle,
 } from "@mui/material";
 
-import { SelectBet } from "../organize/SelectBet";
-import { DisplayPoints } from "../organize/DisplayPoints";
+import { MatrixTableSelectCell } from "../organize/MatrixTableSelectCell";
+import { MatrixTableInputCell } from "../organize/MatrixTableInputCell";
 import { PointsContext } from "../../context/MembersPointsContext";
 import { useCalculatePoints } from "../../hooks/useCalculatePoints";
 import { ChipResults } from "../../types/ChipResults";
-import { MatrixTableRow } from "../organize/MatrixTableRow";
+import { ResultMatrixTableRow } from "../organize/ResultMatrixTableRow";
 import { Members } from "../../types/Members";
+import { RESULT_SCREEN } from "../../const/MatrixConst";
+import { SCORE_SCREEN } from "../../const/MatrixConst";
 
 type Props = {
   setComplete: any;
@@ -70,7 +72,7 @@ export const Matrix: FC<Props> = (props) => {
       width: 100,
       sortable: false,
       editable: true,
-      renderCell: (params: any) => <SelectBet params={params} />,
+      renderCell: (params: any) => <MatrixTableSelectCell params={params} />,
     },
     {
       field: "member1",
@@ -78,7 +80,7 @@ export const Matrix: FC<Props> = (props) => {
       sortable: false,
       width: 100,
       editable: true,
-      renderCell: (params: any) => <DisplayPoints params={params} />,
+      renderCell: (params: any) => <MatrixTableInputCell params={params} />,
     },
     {
       field: "member2",
@@ -86,7 +88,7 @@ export const Matrix: FC<Props> = (props) => {
       sortable: false,
       width: 100,
       editable: true,
-      renderCell: (params: any) => <DisplayPoints params={params} />,
+      renderCell: (params: any) => <MatrixTableInputCell params={params} />,
     },
     {
       field: "member3",
@@ -94,7 +96,7 @@ export const Matrix: FC<Props> = (props) => {
       sortable: false,
       width: 100,
       editable: true,
-      renderCell: (params: any) => <DisplayPoints params={params} />,
+      renderCell: (params: any) => <MatrixTableInputCell params={params} />,
     },
     {
       field: "member4",
@@ -102,7 +104,7 @@ export const Matrix: FC<Props> = (props) => {
       sortable: false,
       width: 100,
       editable: true,
-      renderCell: (params: any) => <DisplayPoints params={params} />,
+      renderCell: (params: any) => <MatrixTableInputCell params={params} />,
     },
   ];
 
@@ -153,7 +155,7 @@ export const Matrix: FC<Props> = (props) => {
         }}
       >
         <Typography variant="h5" sx={{ p: 1, mr: 2 }}>
-          スコア表
+          {SCORE_SCREEN.header}
         </Typography>
         <AddCircleIcon onClick={addRows} />
         <Typography sx={{ verticalAlign: "middle" }}>行を追加する</Typography>
@@ -175,7 +177,7 @@ export const Matrix: FC<Props> = (props) => {
         }}
       >
         <Typography variant="h5" sx={{ p: 1 }}>
-          結果
+          {RESULT_SCREEN.header}
         </Typography>
         <Button variant="contained" onClick={excuteCalculatePoints}>
           計算する
@@ -188,15 +190,15 @@ export const Matrix: FC<Props> = (props) => {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell sx={{ width: 70 }}>メンバー</TableCell>
+              <TableCell sx={{ width: 70 }}>{RESULT_SCREEN.column1}</TableCell>
               <TableCell sx={{ width: 100 }} align="left">
-                チップ枚数
+                {RESULT_SCREEN.column2}
               </TableCell>
-              <TableCell align="right">合計</TableCell>
+              <TableCell align="right">{RESULT_SCREEN.column3}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            <MatrixTableRow
+            <ResultMatrixTableRow
               member={jsonMembers}
               result={result}
               onChipTotal={onChipTotal}
@@ -218,11 +220,11 @@ export const Matrix: FC<Props> = (props) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"クリアしてもいいですか"}
+          {RESULT_SCREEN.dialog_title}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            クリアすると、今回のスコア表が削除され設定画面に画面に戻ります
+            {RESULT_SCREEN.dialog_message}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

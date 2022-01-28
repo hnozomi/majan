@@ -1,16 +1,16 @@
-import { FC, useContext, useState } from "react";
+import { FC, useContext } from "react";
 
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 
 import { PointsContext } from "../../context/MembersPointsContext";
-import { betArrays } from "../../const/SelectBetConst";
+import { BETARRAYS } from "../../const/MatrixTableSelectCellConst";
 
 type Props = {
   params: any;
 };
 
-export const SelectBet: FC<Props> = (props) => {
+export const MatrixTableSelectCell: FC<Props> = (props) => {
   const { field, id } = props.params;
   const { points, updateMatrix } = useContext(PointsContext);
 
@@ -23,8 +23,9 @@ export const SelectBet: FC<Props> = (props) => {
         label="Bet"
         onChange={(e) => updateMatrix(e, id, field)}
       >
-        {betArrays.map((array, index) => (
-          <MenuItem sx={{ width: "100%" }} value={array} key={index}>
+        {BETARRAYS.map((array, index) => (
+          // <MenuItem sx={{ width: "100%" }} value={array} key={index}>
+          <MenuItem value={array} key={index}>
             {array}
           </MenuItem>
         ))}

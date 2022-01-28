@@ -17,21 +17,10 @@ type ScoreRowsType = {
   member3: number | null;
   member4: number | null;
 };
-// type ScoreRowsType = [
-//   {
-//     bet: string;
-//     member1: number | null;
-//     member2: number | null;
-//     member3: number | null;
-//     member4: number | null;
-//   }
-// ];
 
 export const PointsProvider = (props: any) => {
   const { children } = props;
-  //<Array<>> と <[]> は同じ
-  // const [points, setPoints] = useState<Array<ScoreRowsType>>([
-  const [points, setPoints] = useState<ScoreRowsType[]>([
+  const [points, setPoints] = useState<Array<ScoreRowsType>>([
     { bet: "", member1: null, member2: null, member3: null, member4: null },
   ]);
 
@@ -68,6 +57,7 @@ export const PointsProvider = (props: any) => {
   };
 
   const updateMatrix = (e: any, id: number, fieldName: string) => {
+    console.log(id, fieldName);
     const sliceArray = { ...points[id - 1] }; //配列から対象のIndex部分のみ抜き出す  [id - 1]のみ抽出
     if (e.target.value === "") {
       const temp = { ...sliceArray, [fieldName]: null };
@@ -80,6 +70,7 @@ export const PointsProvider = (props: any) => {
     }
   };
 
+  console.log(points);
   return (
     <PointsContext.Provider
       value={{
