@@ -5,13 +5,16 @@ import Select from "@mui/material/Select";
 
 import { PointsContext } from "../../context/MembersPointsContext";
 import { BETARRAYS } from "../../const/MatrixTableSelectCellConst";
+import { GridRenderCellParams } from "@mui/x-data-grid";
 
 type Props = {
-  params: any;
+  params: GridRenderCellParams;
 };
 
 export const MatrixTableSelectCell: FC<Props> = (props) => {
-  const { field, id } = props.params;
+  const { params } = props;
+  const id = params.id as number; // paramss.idは string | number (GridRowId)のため、numberのみにする
+  const field = params.field;
   const { points, updateMatrix } = useContext(PointsContext);
 
   return (
@@ -24,7 +27,6 @@ export const MatrixTableSelectCell: FC<Props> = (props) => {
         onChange={(e) => updateMatrix(e, id, field)}
       >
         {BETARRAYS.map((array, index) => (
-          // <MenuItem sx={{ width: "100%" }} value={array} key={index}>
           <MenuItem value={array} key={index}>
             {array}
           </MenuItem>

@@ -8,11 +8,14 @@ import { PointsProvider } from "./context/MembersPointsContext";
 
 export const App = () => {
   const Complete = localStorage.getItem("Complete");
-  const [complete, setComplete] = useState(Complete);
+  console.log(Complete);
+
+  // const [complete, setComplete] = useState(true);
+  const [complete, setComplete] = useState(Complete === "true" ? true : false);
 
   const onSettingComplate = () => {
     localStorage.setItem("Complete", "true");
-    setComplete("true");
+    setComplete(true);
   };
 
   return complete ? (

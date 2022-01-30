@@ -1,21 +1,25 @@
 import { FC, useContext } from "react";
 
 import { Input, InputAdornment } from "@mui/material";
+import { GridRenderCellParams } from "@mui/x-data-grid";
 
 import { PointsContext } from "../../context/MembersPointsContext";
 import { UNIT } from "../../const/MatrixConst";
 
 type Props = {
-  params: any;
+  params: GridRenderCellParams;
 };
 
 export const MatrixTableInputCell: FC<Props> = (props) => {
-  const { updateMatrix, points } = useContext(PointsContext);
   const { params } = props;
-  const { field, id } = params;
+  const { updateMatrix, points } = useContext(PointsContext);
+
+  const id = params.id as number; // paramss.idは string | number (GridRowId)のため、numberのみにする
+  const field = params.field;
+
   return (
     <Input
-      type="number"
+      type="tel"
       sx={{ textAlign: "right" }}
       value={points[id - 1][field] === null ? "" : points[id - 1][field]}
       onChange={(e) => updateMatrix(e, id, field)}

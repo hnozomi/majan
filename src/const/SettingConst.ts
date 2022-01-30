@@ -3,7 +3,7 @@ export const SETTING = {
     title1: "対戦相手",
     title2: "返し",
     title3: "チップ",
-    distribution: "配布数",
+    distribution: "配布数(1人当たり)",
     cost: "金額",
     dialog_title: "エラー"
 }
