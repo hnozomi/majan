@@ -1,3 +1,4 @@
+import { copyFileSync } from "fs";
 import { createContext, useEffect, useState } from "react";
 
 export type MembersPointsType = {
@@ -23,6 +24,8 @@ export const PointsProvider = (props: any) => {
   const [points, setPoints] = useState<Array<ScoreRowsType>>([
     { bet: "", member1: null, member2: null, member3: null, member4: null },
   ]);
+  console.log("PointsProvider実行");
+  console.log(points, "PointsProvider実行");
 
   useEffect(() => {
     createMatrix();
@@ -57,6 +60,7 @@ export const PointsProvider = (props: any) => {
   };
 
   const updateMatrix = (e: any, id: number, fieldName: string) => {
+    console.log("updateMatrix");
     const sliceArray = { ...points[id - 1] }; //配列から対象のIndex部分のみ抜き出す  [id - 1]のみ抽出
     if (e.target.value === "") {
       const temp = { ...sliceArray, [fieldName]: null };

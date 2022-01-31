@@ -13,6 +13,7 @@ type Props = {
 };
 
 export const ResultMatrixTableRow = (props: Props) => {
+  console.log("ResultMatrixTableRow実行");
   const { member, result, onChipTotal } = props;
 
   return (

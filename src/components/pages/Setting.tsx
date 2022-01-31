@@ -33,6 +33,7 @@ type Props = {
 };
 
 export const Setting: FC<Props> = (props) => {
+  console.log("Setting実行");
   const { onSettingComplate } = props;
   const { addToLocalStorage } = useAddToLocalStorage();
   const [kaeshi, setKaeshi] = useState(0);
@@ -146,7 +147,6 @@ export const Setting: FC<Props> = (props) => {
         <Input
           type="number"
           name="member4"
-          // onChange={onChipTotal}
           onChange={(e) => setKaeshi(Number(e.target.value))}
           endAdornment={
             <InputAdornment position="end">{UNIT.point}</InputAdornment>
@@ -155,7 +155,7 @@ export const Setting: FC<Props> = (props) => {
         <M_Typography>{SETTING.title3}</M_Typography>
         <FormGroup>
           <FormControlLabel
-            control={<Checkbox defaultChecked />}
+            control={<Checkbox />}
             label="あり"
             value={true}
             checked={chipInfomation.hasChip}
@@ -174,7 +174,6 @@ export const Setting: FC<Props> = (props) => {
         {chipInfomation.hasChip && (
           <Box sx={{ flexGrow: 1 }}>
             <Grid container sx={{ alignItems: "center", mt: 2 }}>
-              {/* <Grid xs={2}>配布数</Grid> */}
               <Grid>
                 <InputLabel>{SETTING.distribution}</InputLabel>
                 <Input

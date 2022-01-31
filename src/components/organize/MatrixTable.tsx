@@ -11,15 +11,13 @@ import { MatrixTableInputCell } from "./MatrixTableInputCell";
 import { PointsContext } from "../../context/MembersPointsContext";
 
 export const MatrixTable = () => {
+  console.log("matrixtable実行");
   const members = localStorage.getItem("Members");
   const jsonMembers: Members = JSON.parse(members!);
   const { updateRow } = useContext(PointsContext);
 
   const [rows, setRows] = useState([{ id: 1 }, { id: 2 }, { id: 3 }]);
 
-  {
-    console.log(jsonMembers);
-  }
   const columns = [
     { field: "id", headerName: "ID", width: 50 },
     {
@@ -29,7 +27,7 @@ export const MatrixTable = () => {
       sortable: false,
       editable: true,
       renderCell: (params: GridRenderCellParams<Date>) => (
-        <MatrixTableSelectCell params={params} />
+        <MatrixTableSelectCell id={params.id} field={params.field} />
       ),
     },
     {
@@ -39,7 +37,7 @@ export const MatrixTable = () => {
       width: 100,
       editable: true,
       renderCell: (params: GridRenderCellParams<Date>) => (
-        <MatrixTableInputCell params={params} />
+        <MatrixTableInputCell id={params.id} field={params.field} />
       ),
     },
     {
@@ -49,7 +47,7 @@ export const MatrixTable = () => {
       width: 100,
       editable: true,
       renderCell: (params: GridRenderCellParams<Date>) => (
-        <MatrixTableInputCell params={params} />
+        <MatrixTableInputCell id={params.id} field={params.field} />
       ),
     },
     {
@@ -59,7 +57,7 @@ export const MatrixTable = () => {
       width: 100,
       editable: true,
       renderCell: (params: GridRenderCellParams<Date>) => (
-        <MatrixTableInputCell params={params} />
+        <MatrixTableInputCell id={params.id} field={params.field} />
       ),
     },
     {
@@ -69,7 +67,7 @@ export const MatrixTable = () => {
       width: 100,
       editable: true,
       renderCell: (params: GridRenderCellParams<Date>) => (
-        <MatrixTableInputCell params={params} />
+        <MatrixTableInputCell id={params.id} field={params.field} />
       ),
     },
   ];
@@ -80,11 +78,8 @@ export const MatrixTable = () => {
     setRows([...rows, addRows]);
   };
 
-  console.log("Tableレンダリング");
-
   return (
     <>
-      {console.log(jsonMembers)}
       <Box
         sx={{
           display: "flex",

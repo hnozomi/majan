@@ -1,20 +1,20 @@
-import { FC, useContext } from "react";
+import { FC, memo, useContext } from "react";
 
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 
 import { PointsContext } from "../../context/MembersPointsContext";
 import { BETARRAYS } from "../../const/MatrixTableSelectCellConst";
-import { GridRenderCellParams } from "@mui/x-data-grid";
+import { GridRowId } from "@mui/x-data-grid";
 
 type Props = {
-  params: GridRenderCellParams;
+  id: GridRowId;
+  field: string;
 };
 
-export const MatrixTableSelectCell: FC<Props> = (props) => {
-  const { params } = props;
-  const id = params.id as number; // paramss.idは string | number (GridRowId)のため、numberのみにする
-  const field = params.field;
+export const MatrixTableSelectCell: FC<Props> = memo((props) => {
+  const { field, id } = props;
+  const numberId = id as number; // params.idは string | number (GridRowId)のため、numberのみにする。しかし、as (型アサーションは型の上書きになるためあまり使わないほうが良さそう)
   const { points, updateMatrix } = useContext(PointsContext);
 
   return (
@@ -22,9 +22,9 @@ export const MatrixTableSelectCell: FC<Props> = (props) => {
       <Select
         variant="standard"
         sx={{ width: "100%" }}
-        value={points[id - 1]?.bet}
+        value={points[numberId - 1]?.bet}
         label="Bet"
-        onChange={(e) => updateMatrix(e, id, field)}
+        onChange={(e) => updateMatrix(e, numberId, field)}
       >
         {BETARRAYS.map((array, index) => (
           <MenuItem value={array} key={index}>
@@ -34,4 +34,4 @@ export const MatrixTableSelectCell: FC<Props> = (props) => {
       </Select>
     </>
   );
-};
+});

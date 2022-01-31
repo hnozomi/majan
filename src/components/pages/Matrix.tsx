@@ -13,14 +13,13 @@ import { RESULT_SCREEN } from "../../const/MatrixConst";
 import { MatrixTable } from "../organize/MatrixTable";
 import { ResultMatrixTable } from "../organize/ResultMatrixTable";
 import { Dispatch } from "react";
-import { Members } from "../../types/Members";
 
 type Props = {
-  // setComplete: any;
   setComplete: Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const Matrix: FC<Props> = (props) => {
+  console.log("Matrixが実行されました");
   const { setComplete } = props;
 
   const [open, setOpen] = useState(false);
@@ -37,11 +36,6 @@ export const Matrix: FC<Props> = (props) => {
     setComplete(false);
     setOpen(false);
   };
-
-  const members = localStorage.getItem("Members");
-  console.log(members);
-  const jsonMembers: Members = JSON.parse(members!);
-  console.log(jsonMembers);
 
   return (
     <>
