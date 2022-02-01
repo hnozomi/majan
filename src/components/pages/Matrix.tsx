@@ -19,7 +19,6 @@ type Props = {
 };
 
 export const Matrix: FC<Props> = (props) => {
-  console.log("Matrixが実行されました");
   const { setComplete } = props;
 
   const [open, setOpen] = useState(false);

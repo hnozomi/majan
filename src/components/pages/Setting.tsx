@@ -1,12 +1,7 @@
 import { FC, useState, ChangeEvent, SyntheticEvent } from "react";
 
 import {
-  Grid,
   Typography,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  TextField,
   Button,
   Box,
   Dialog,
@@ -14,32 +9,26 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Input,
-  InputLabel,
-  InputAdornment,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { useAddToLocalStorage } from "../../hooks/useAddToLocalStorage";
 
-import { UNIT } from "../../const/MatrixConst";
 import { SETTING } from "../../const/SettingConst";
-
-const M_Typography = styled(Typography)({
-  marginTop: "1em",
-});
+import { MembersSettingForm } from "../organize/MembersSettingForm";
+import { ChipInfomation } from "../../types/ChipInfomation";
+import { RulesSettingForm } from "../organize/RulesSettingForm";
 
 type Props = {
   onSettingComplate: () => void;
 };
 
 export const Setting: FC<Props> = (props) => {
-  console.log("Setting実行");
   const { onSettingComplate } = props;
   const { addToLocalStorage } = useAddToLocalStorage();
   const [kaeshi, setKaeshi] = useState(0);
   const [modalMessage, setModalMessage] = useState("");
   const [open, setOpen] = useState(false);
-  const [chipInfomation, setChipInfomation] = useState({
+  const [chipInfomation, setChipInfomation] = useState<ChipInfomation>({
     hasChip: false,
     total: 0,
     money: 0,
@@ -63,7 +52,6 @@ export const Setting: FC<Props> = (props) => {
 
   const onSetMembers = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    e.preventDefault();
     const number = e.target.name;
     const tempMembers = { ...members, [number]: e.target.value }; //[]をつけないと新たにnumberというKeyができる
     setMembers(tempMembers);
@@ -78,13 +66,13 @@ export const Setting: FC<Props> = (props) => {
   };
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ m: 1 }}>
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          mb: 3,
+          mb: 2,
         }}
       >
         <Typography variant="h4">{SETTING.header}</Typography>
@@ -103,108 +91,14 @@ export const Setting: FC<Props> = (props) => {
           })
         }
       >
-        <Typography sx={{ mb: 1 }}>{SETTING.title1}</Typography>
-        <Grid container columns={2} direction="column">
-          <TextField
-            sx={{ mb: 1 }}
-            id="standard-basic"
-            label="1人目"
-            variant="standard"
-            value={members.member1}
-            name="member1"
-            onChange={onSetMembers}
-          />
-          <TextField
-            sx={{ mb: 1 }}
-            id="standard-basic"
-            label="2人目"
-            variant="standard"
-            value={members.member2}
-            name="member2"
-            onChange={onSetMembers}
-          />
-          <TextField
-            sx={{ mb: 1 }}
-            id="standard-basic"
-            label="3人目"
-            variant="standard"
-            value={members.member3}
-            name="member3"
-            onChange={onSetMembers}
-          />
-          <TextField
-            sx={{ mb: 1 }}
-            id="standard-basic"
-            label="4人目"
-            variant="standard"
-            value={members.member4}
-            name="member4"
-            onChange={onSetMembers}
-          />
-        </Grid>
+        <MembersSettingForm members={members} onSetMembers={onSetMembers} />
 
-        <M_Typography>{SETTING.title2}</M_Typography>
-        <Input
-          type="number"
-          name="member4"
-          onChange={(e) => setKaeshi(Number(e.target.value))}
-          endAdornment={
-            <InputAdornment position="end">{UNIT.point}</InputAdornment>
-          }
+        <RulesSettingForm
+          setKaeshi={setKaeshi}
+          chipInfomation={chipInfomation}
+          onChipInformation={onChipInformation}
+          onSetChip={onSetChip}
         />
-        <M_Typography>{SETTING.title3}</M_Typography>
-        <FormGroup>
-          <FormControlLabel
-            control={<Checkbox />}
-            label="あり"
-            value={true}
-            checked={chipInfomation.hasChip}
-            onChange={onSetChip}
-            name="hasChip"
-          />
-          <FormControlLabel
-            control={<Checkbox />}
-            label="なし"
-            value={false}
-            checked={!chipInfomation.hasChip}
-            onChange={onSetChip}
-            name="hasChip"
-          />
-        </FormGroup>
-        {chipInfomation.hasChip && (
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid container sx={{ alignItems: "center", mt: 2 }}>
-              <Grid>
-                <InputLabel>{SETTING.distribution}</InputLabel>
-                <Input
-                  type="number"
-                  name="total"
-                  onChange={onChipInformation}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      {UNIT.distribution}
-                    </InputAdornment>
-                  }
-                />
-              </Grid>
-            </Grid>
-            <Grid container sx={{ alignItems: "center", mt: 2 }}>
-              <Grid>
-                <InputLabel>{SETTING.cost}</InputLabel>
-                <Input
-                  type="number"
-                  name="money"
-                  onChange={onChipInformation}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      {UNIT.distribution}
-                    </InputAdornment>
-                  }
-                />
-              </Grid>
-            </Grid>
-          </Box>
-        )}
         <Box sx={{ textAlign: "right" }}>
           <Button variant="contained" type="submit">
             登録

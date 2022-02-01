@@ -11,7 +11,6 @@ import { MatrixTableInputCell } from "./MatrixTableInputCell";
 import { PointsContext } from "../../context/MembersPointsContext";
 
 export const MatrixTable = () => {
-  console.log("matrixtable実行");
   const members = localStorage.getItem("Members");
   const jsonMembers: Members = JSON.parse(members!);
   const { updateRow } = useContext(PointsContext);
@@ -79,27 +78,30 @@ export const MatrixTable = () => {
   };
 
   return (
-    <>
+    <Box sx={{ m: 1 }}>
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
-          p: 1,
+          mt: 2,
         }}
       >
-        <Typography variant="h5" sx={{ p: 1, mr: 2 }}>
+        <Typography variant="h5" sx={{ mr: 2 }}>
           {SCORE_SCREEN.header}
         </Typography>
         <AddCircleIcon onClick={addRows} />
-        <Typography sx={{ verticalAlign: "middle" }}>行を追加する</Typography>
+        <Typography sx={{ verticalAlign: "middle" }}>行を追加</Typography>
       </Box>
+      <Typography sx={{ color: "red", mb: 1, fontSize: "0.85em" }}>
+        飛び賞・焼き鳥・オカの得点も追加しておく
+      </Typography>
       <DataGrid
-        sx={{ boxSizing: "border-box", m: 1, height: 400 }}
+        sx={{ boxSizing: "border-box", height: 400 }}
         rows={rows}
         columns={columns}
         pageSize={5}
         editMode="row"
       />
-    </>
+    </Box>
   );
 };
