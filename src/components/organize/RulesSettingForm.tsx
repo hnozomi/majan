@@ -85,9 +85,7 @@ export const RulesSettingForm: FC<Props> = (props) => {
                 name="money"
                 onChange={onChipInformation}
                 endAdornment={
-                  <InputAdornment position="end">
-                    {UNIT.distribution}
-                  </InputAdornment>
+                  <InputAdornment position="end">{UNIT.total}</InputAdornment>
                 }
               />
             </Grid>

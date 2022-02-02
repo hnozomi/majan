@@ -78,12 +78,12 @@ export const MatrixTable = () => {
   };
 
   return (
-    <Box sx={{ m: 1 }}>
+    <>
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
-          mt: 2,
+          mt: 3,
         }}
       >
         <Typography variant="h5" sx={{ mr: 2 }}>
@@ -102,6 +102,6 @@ export const MatrixTable = () => {
         pageSize={5}
         editMode="row"
       />
-    </Box>
+    </>
   );
 };

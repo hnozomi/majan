@@ -68,8 +68,7 @@ export const ResultMatrixTable = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          p: 1,
-          mt: 5,
+          mt: 3,
         }}
       >
         <Typography variant="h5" sx={{ p: 1 }}>

@@ -4,6 +4,6 @@ export const SETTING = {
     title2: "返し",
     title3: "チップ",
     distribution: "配布数(1人当たり)",
-    cost: "金額",
+    cost: "金額(1枚につき)",
     dialog_title: "エラー"
 }

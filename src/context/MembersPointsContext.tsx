@@ -1,9 +1,14 @@
-import { copyFileSync } from "fs";
-import { createContext, useEffect, useState } from "react";
+import { SelectChangeEvent } from "@mui/material";
+import { ChangeEvent } from "react";
+import { FC, createContext, ReactNode, useEffect, useState } from "react";
 
 export type MembersPointsType = {
-  points: any;
-  updateMatrix: (e: any, id: number, fieldName: string) => void;
+  points: ScoreRowsType;
+  updateMatrix: (
+    e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement> | SelectChangeEvent,
+    id: number,
+    fieldName: string
+  ) => void;
   updateRow: () => void;
 };
 
@@ -12,27 +17,32 @@ export const PointsContext = createContext<MembersPointsType>(
 );
 
 type ScoreRowsType = {
-  bet: string;
-  member1: number | null;
-  member2: number | null;
-  member3: number | null;
-  member4: number | null;
+  [key: string]: string | null;
+};
+// type ScoreRowsType = {
+//   bet: string;
+//   member1: number | null;
+//   member2: number | null;
+//   member3: number | null;
+//   member4: number | null;
+// };
+
+type Props = {
+  children: ReactNode;
 };
 
-export const PointsProvider = (props: any) => {
+export const PointsProvider: FC<Props> = (props) => {
   const { children } = props;
   const [points, setPoints] = useState<Array<ScoreRowsType>>([
     { bet: "", member1: null, member2: null, member3: null, member4: null },
   ]);
-  console.log("PointsProvider実行");
-  console.log(points, "PointsProvider実行");
 
   useEffect(() => {
     createMatrix();
   }, []);
 
   const createMatrix = () => {
-    const array: any[] = new Array(3).fill({
+    const array: ScoreRowsType[] = new Array(3).fill({
       bet: "",
       member1: null,
       member2: null,
@@ -40,7 +50,7 @@ export const PointsProvider = (props: any) => {
       member4: null,
     });
 
-    const nullArray: any = [...array];
+    const nullArray: ScoreRowsType[] = [...array];
 
     for (var i = 0; i < points.length; i++) {
       nullArray[i] = points[i];
@@ -60,7 +70,6 @@ export const PointsProvider = (props: any) => {
   };
 
   const updateMatrix = (e: any, id: number, fieldName: string) => {
-    console.log("updateMatrix");
     const sliceArray = { ...points[id - 1] }; //配列から対象のIndex部分のみ抜き出す  [id - 1]のみ抽出
     if (e.target.value === "") {
       const temp = { ...sliceArray, [fieldName]: null };

@@ -11,6 +11,10 @@ type Props = {
   field: string;
 };
 
+type Test = {
+  [key: string]: number;
+};
+
 export const MatrixTableInputCell: FC<Props> = memo((props) => {
   const { id, field } = props;
   const { updateMatrix, points } = useContext(PointsContext);

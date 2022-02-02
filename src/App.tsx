@@ -7,7 +7,6 @@ import { PointsProvider } from "./context/MembersPointsContext";
 // ローカルストレージに保存しているCompleteで判断
 
 export const App = () => {
-  console.log("App実行");
   const Complete = localStorage.getItem("Complete");
 
   const [complete, setComplete] = useState(Complete === "true" ? true : false);

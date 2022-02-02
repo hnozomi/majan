@@ -10,13 +10,13 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { styled } from "@mui/system";
-import { useAddToLocalStorage } from "../../hooks/useAddToLocalStorage";
 
+import { useAddToLocalStorage } from "../../hooks/useAddToLocalStorage";
 import { SETTING } from "../../const/SettingConst";
 import { MembersSettingForm } from "../organize/MembersSettingForm";
 import { ChipInfomation } from "../../types/ChipInfomation";
 import { RulesSettingForm } from "../organize/RulesSettingForm";
+import { Members } from "../../types/Members";
 
 type Props = {
   onSettingComplate: () => void;
@@ -33,7 +33,7 @@ export const Setting: FC<Props> = (props) => {
     total: 0,
     money: 0,
   });
-  const [members, setMembers] = useState({
+  const [members, setMembers] = useState<Members>({
     member1: "",
     member2: "",
     member3: "",

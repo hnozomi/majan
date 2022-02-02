@@ -1,18 +1,19 @@
-import { useState, FC } from "react";
+import { Dispatch, useState, FC } from "react";
 
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Typography,
 } from "@mui/material";
 
 import { RESULT_SCREEN } from "../../const/MatrixConst";
 import { MatrixTable } from "../organize/MatrixTable";
 import { ResultMatrixTable } from "../organize/ResultMatrixTable";
-import { Dispatch } from "react";
 
 type Props = {
   setComplete: Dispatch<React.SetStateAction<boolean>>;
@@ -37,16 +38,15 @@ export const Matrix: FC<Props> = (props) => {
   };
 
   return (
-    <>
+    <Box sx={{ m: 1 }}>
       <MatrixTable />
       <ResultMatrixTable />
-      <Button
-        sx={{ mt: 1, mb: 1 }}
-        variant="contained"
-        onClick={() => setOpen(true)}
-      >
-        クリアする
-      </Button>
+      <Box sx={{ p: 1, mb: 3 }}>
+        <Typography>メンバーやルールを変える場合下記ボタンを押す</Typography>
+        <Button variant="contained" onClick={() => setOpen(true)}>
+          クリアする
+        </Button>
+      </Box>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -68,6 +68,6 @@ export const Matrix: FC<Props> = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </Box>
   );
 };

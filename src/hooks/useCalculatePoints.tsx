@@ -1,5 +1,9 @@
 import { ChipResults } from "../types/ChipResults";
 
+type ReduceElementType = {
+  [key: string]: string | null;
+};
+
 export const useCalculatePoints = () => {
   const kaeshi = Number(localStorage.getItem("Kaeshi"));
   const chipInfomation = localStorage.getItem("Chip");
@@ -8,7 +12,7 @@ export const useCalculatePoints = () => {
   const pointTotal = (points: any, name: string) => {
     let total = 0;
     const calculateResult: number = points.reduce(
-      (sum: number, element: any, index: number) => {
+      (sum: number, element: ReduceElementType, index: number) => {
         const bet = points[index].bet.slice(1) / 100;
 
         if (element[name] !== null) {

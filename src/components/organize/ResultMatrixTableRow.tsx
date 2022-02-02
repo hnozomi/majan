@@ -17,10 +17,10 @@ export const ResultMatrixTableRow = (props: Props) => {
 
   return (
     <>
-      {(Object.keys(member) as (keyof Members)[]).map(
+      {Object.keys(member).map(
         (
-          key: keyof Members, //Object.keyでmemberオブジェクトのキーだけを抜き出し、配列にして返す
-          index: number
+          key, //Object.keyでmemberオブジェクトのキーだけを抜き出し、配列にして返す
+          index
         ) => (
           <TableRow key={index}>
             <TableCell component="th" scope="row">

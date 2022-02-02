@@ -1,3 +1,4 @@
+import { Dispatch } from "react";
 import { FormEvent } from "react";
 
 import { useFormValidation } from "../hooks/useFormValidation";
@@ -8,10 +9,10 @@ type Props = {
   members: Members;
   kaeshi: number;
   chipInfomation: ChipInfomation;
-  setMembers: any;
-  onSettingComplate: any;
-  handleClickOpen: any;
-  setModalMessage: any;
+  setMembers: Dispatch<React.SetStateAction<Members>>;
+  onSettingComplate: () => void;
+  handleClickOpen: () => void;
+  setModalMessage: Dispatch<React.SetStateAction<string>>;
 };
 
 export const useAddToLocalStorage = () => {
@@ -34,7 +35,7 @@ export const useAddToLocalStorage = () => {
       kaeshi: kaeshi,
       chipInfomation: chipInfomation,
     });
-    let updateMembers = {};
+    let updateMembers = members;
     if (members.member4 === "") {
       updateMembers = { ...members, member4: "無し" };
       setMembers({ ...members, member4: "無し" });
